@@ -3,7 +3,10 @@ import api from "../services/api.js";
 import { toast } from "../store/useToastStore.js";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
-import { LoadingSpinner, EmptyState } from "../components/common/LoadingSpinner.jsx";
+import {
+  LoadingSpinner,
+  EmptyState,
+} from "../components/common/LoadingSpinner.jsx";
 import { Mail, Plus, Edit2, Trash2, Send, Eye, Code } from "lucide-react";
 
 export default function EmailTemplatesPage() {
@@ -165,13 +168,14 @@ export default function EmailTemplatesPage() {
             <span>Email Templates Management</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Design HTML templates for verification OTPs, welcome emails, and password resets
+            Design HTML templates for verification OTPs, welcome emails, and
+            password resets
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>New Email Template</span>
@@ -200,7 +204,9 @@ export default function EmailTemplatesPage() {
                     <span className="text-xs font-mono text-purple-400 font-bold block mb-1">
                       #{tpl.identifier}
                     </span>
-                    <h3 className="text-base font-semibold text-slate-100">{tpl.subject}</h3>
+                    <h3 className="text-base font-semibold text-slate-100">
+                      {tpl.subject}
+                    </h3>
                   </div>
 
                   <div className="flex items-center gap-1">
@@ -239,7 +245,11 @@ export default function EmailTemplatesPage() {
 
               <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
                 <span>Variables: {"{{fullname}}, {{otp}}"}</span>
-                <span>{new Date(tpl.updatedAt || tpl.createdAt).toLocaleDateString()}</span>
+                <span>
+                  {new Date(
+                    tpl.updatedAt || tpl.createdAt,
+                  ).toLocaleDateString()}
+                </span>
               </div>
             </div>
           ))}
@@ -263,18 +273,24 @@ export default function EmailTemplatesPage() {
                 type="text"
                 required
                 value={formData.identifier}
-                onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, identifier: e.target.value })
+                }
                 placeholder="e.g. otp-verification"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Subject *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Subject *
+              </label>
               <input
                 type="text"
                 required
                 value={formData.subject}
-                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, subject: e.target.value })
+                }
                 placeholder="Verify your OtakuDuo account"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
@@ -283,13 +299,17 @@ export default function EmailTemplatesPage() {
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-semibold text-slate-300">HTML Template Body *</label>
+              <label className="text-xs font-semibold text-slate-300">
+                HTML Template Body *
+              </label>
               <div className="flex items-center gap-1 bg-[#161a29] p-0.5 rounded-lg border border-slate-800">
                 <button
                   type="button"
                   onClick={() => setEditorMode("code")}
                   className={`px-2.5 py-1 text-xs font-medium rounded-md flex items-center gap-1 ${
-                    editorMode === "code" ? "bg-rose-600 text-white" : "text-slate-400 hover:text-white"
+                    editorMode === "code"
+                      ? "bg-rose-600 text-white"
+                      : "text-slate-400 hover:text-white"
                   }`}
                 >
                   <Code className="w-3 h-3" />
@@ -299,7 +319,9 @@ export default function EmailTemplatesPage() {
                   type="button"
                   onClick={() => setEditorMode("preview")}
                   className={`px-2.5 py-1 text-xs font-medium rounded-md flex items-center gap-1 ${
-                    editorMode === "preview" ? "bg-rose-600 text-white" : "text-slate-400 hover:text-white"
+                    editorMode === "preview"
+                      ? "bg-rose-600 text-white"
+                      : "text-slate-400 hover:text-white"
                   }`}
                 >
                   <Eye className="w-3 h-3" />
@@ -313,13 +335,17 @@ export default function EmailTemplatesPage() {
                 rows="8"
                 required
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, content: e.target.value })
+                }
                 className="w-full p-3 bg-[#161a29] border border-slate-700 rounded-xl text-xs font-mono text-slate-100"
               />
             ) : (
               <div
                 className="w-full h-52 p-4 bg-white text-black rounded-xl overflow-y-auto"
-                dangerouslySetInnerHTML={{ __html: getPreviewHtml(formData.content) }}
+                dangerouslySetInnerHTML={{
+                  __html: getPreviewHtml(formData.content),
+                }}
               />
             )}
             <p className="text-[11px] text-slate-500 mt-1">
@@ -356,22 +382,30 @@ export default function EmailTemplatesPage() {
         <form onSubmit={handleEditSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Identifier</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Identifier
+              </label>
               <input
                 type="text"
                 required
                 value={formData.identifier}
-                onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, identifier: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Subject</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Subject
+              </label>
               <input
                 type="text"
                 required
                 value={formData.subject}
-                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, subject: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
@@ -379,13 +413,17 @@ export default function EmailTemplatesPage() {
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-semibold text-slate-300">HTML Template Body</label>
+              <label className="text-xs font-semibold text-slate-300">
+                HTML Template Body
+              </label>
               <div className="flex items-center gap-1 bg-[#161a29] p-0.5 rounded-lg border border-slate-800">
                 <button
                   type="button"
                   onClick={() => setEditorMode("code")}
                   className={`px-2.5 py-1 text-xs font-medium rounded-md flex items-center gap-1 ${
-                    editorMode === "code" ? "bg-rose-600 text-white" : "text-slate-400 hover:text-white"
+                    editorMode === "code"
+                      ? "bg-rose-600 text-white"
+                      : "text-slate-400 hover:text-white"
                   }`}
                 >
                   <Code className="w-3 h-3" />
@@ -395,7 +433,9 @@ export default function EmailTemplatesPage() {
                   type="button"
                   onClick={() => setEditorMode("preview")}
                   className={`px-2.5 py-1 text-xs font-medium rounded-md flex items-center gap-1 ${
-                    editorMode === "preview" ? "bg-rose-600 text-white" : "text-slate-400 hover:text-white"
+                    editorMode === "preview"
+                      ? "bg-rose-600 text-white"
+                      : "text-slate-400 hover:text-white"
                   }`}
                 >
                   <Eye className="w-3 h-3" />
@@ -409,13 +449,17 @@ export default function EmailTemplatesPage() {
                 rows="8"
                 required
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, content: e.target.value })
+                }
                 className="w-full p-3 bg-[#161a29] border border-slate-700 rounded-xl text-xs font-mono text-slate-100"
               />
             ) : (
               <div
                 className="w-full h-52 p-4 bg-white text-black rounded-xl overflow-y-auto"
-                dangerouslySetInnerHTML={{ __html: getPreviewHtml(formData.content) }}
+                dangerouslySetInnerHTML={{
+                  __html: getPreviewHtml(formData.content),
+                }}
               />
             )}
           </div>
@@ -447,7 +491,8 @@ export default function EmailTemplatesPage() {
       >
         <form onSubmit={handleSendTestEmail} className="space-y-4">
           <p className="text-xs text-slate-400">
-            Send a sample email to verify your SMTP server delivery with mock replacements.
+            Send a sample email to verify your SMTP server delivery with mock
+            replacements.
           </p>
 
           <div>
@@ -478,7 +523,9 @@ export default function EmailTemplatesPage() {
               className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold rounded-xl disabled:opacity-50 flex items-center gap-1.5"
             >
               <Send className="w-3.5 h-3.5" />
-              <span>{actionLoading ? "Sending..." : "Dispatch Test Email"}</span>
+              <span>
+                {actionLoading ? "Sending..." : "Dispatch Test Email"}
+              </span>
             </button>
           </div>
         </form>

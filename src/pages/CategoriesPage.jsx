@@ -4,7 +4,10 @@ import { toast } from "../store/useToastStore.js";
 import Tabs from "../components/common/Tabs.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
-import { LoadingSpinner, EmptyState } from "../components/common/LoadingSpinner.jsx";
+import {
+  LoadingSpinner,
+  EmptyState,
+} from "../components/common/LoadingSpinner.jsx";
 import { Tags, Plus, Edit2, Trash2, Film, Gamepad2 } from "lucide-react";
 
 export default function CategoriesPage() {
@@ -55,7 +58,12 @@ export default function CategoriesPage() {
       .replace(/\s+/g, "-")
       .replace(/[^\w-]+/g, "")
       .replace(/--+/g, "-");
-    setFormData((prev) => ({ ...prev, name, slug: prev.slug === "" || prev.slug === slug.slice(0, -1) ? slug : prev.slug }));
+    setFormData((prev) => ({
+      ...prev,
+      name,
+      slug:
+        prev.slug === "" || prev.slug === slug.slice(0, -1) ? slug : prev.slug,
+    }));
   };
 
   const openCreateModal = () => {
@@ -86,7 +94,8 @@ export default function CategoriesPage() {
     e.preventDefault();
     setActionLoading(true);
     try {
-      const endpoint = activeTab === "anime" ? "/categories/anime" : "/categories/game";
+      const endpoint =
+        activeTab === "anime" ? "/categories/anime" : "/categories/game";
       const res = await api.post(endpoint, formData);
       if (res.status) {
         toast.success("Category created successfully");
@@ -155,16 +164,19 @@ export default function CategoriesPage() {
             <span>Category & Genre Management</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Configure Anime genres and Game categories for user profiling and matchmaking
+            Configure Anime genres and Game categories for user profiling and
+            matchmaking
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
         >
           <Plus className="w-4 h-4" />
-          <span>Add {activeTab === "anime" ? "Anime Genre" : "Game Category"}</span>
+          <span>
+            Add {activeTab === "anime" ? "Anime Genre" : "Game Category"}
+          </span>
         </button>
       </div>
 
@@ -213,8 +225,12 @@ export default function CategoriesPage() {
                       {cat.icon || "🏷️"}
                     </span>
                     <div>
-                      <h3 className="text-sm font-bold text-slate-100">{cat.name}</h3>
-                      <span className="text-[11px] text-purple-400 font-mono">#{cat.slug}</span>
+                      <h3 className="text-sm font-bold text-slate-100">
+                        {cat.name}
+                      </h3>
+                      <span className="text-[11px] text-purple-400 font-mono">
+                        #{cat.slug}
+                      </span>
                     </div>
                   </div>
 
@@ -242,7 +258,9 @@ export default function CategoriesPage() {
               </div>
 
               <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
-                <span>Created {new Date(cat.createdAt).toLocaleDateString()}</span>
+                <span>
+                  Created {new Date(cat.createdAt).toLocaleDateString()}
+                </span>
               </div>
             </div>
           ))}
@@ -258,7 +276,9 @@ export default function CategoriesPage() {
         <form onSubmit={handleCreateSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Name *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Name *
+              </label>
               <input
                 type="text"
                 required
@@ -269,35 +289,47 @@ export default function CategoriesPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Emoji Icon</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Emoji Icon
+              </label>
               <input
                 type="text"
                 value={formData.icon}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, icon: e.target.value })
+                }
                 placeholder="🔥, ⚔️, 🌸"
-                className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 text-center text-lg"
+                className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 text-center"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Slug *</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Slug *
+            </label>
             <input
               type="text"
               required
               value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, slug: e.target.value })
+              }
               placeholder="shonen"
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Description</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Description
+            </label>
             <textarea
               rows="3"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="Action-packed anime with high-stakes training and adventures..."
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
@@ -331,43 +363,59 @@ export default function CategoriesPage() {
         <form onSubmit={handleEditSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Name</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Name
+              </label>
               <input
                 type="text"
                 required
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Emoji Icon</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Emoji Icon
+              </label>
               <input
                 type="text"
                 value={formData.icon}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 text-center text-lg"
+                onChange={(e) =>
+                  setFormData({ ...formData, icon: e.target.value })
+                }
+                className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 text-center"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Slug</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Slug
+            </label>
             <input
               type="text"
               required
               value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, slug: e.target.value })
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Description</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Description
+            </label>
             <textarea
               rows="3"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>

@@ -36,7 +36,7 @@ export default function Header({ onToggleSidebar }) {
         </a>
 
         <div className="flex items-center gap-2 pl-2 border-l border-slate-800">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-rose-500 to-purple-600 flex items-center justify-center font-bold text-white text-xs">
+          <div className="w-7 h-7 rounded-lg bg-linear-to-tr from-rose-500 to-purple-600 flex items-center justify-center font-bold text-white text-xs">
             {admin?.fullname?.[0] || "A"}
           </div>
           <span className="text-xs font-medium text-slate-200 hidden md:inline">

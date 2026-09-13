@@ -5,8 +5,18 @@ import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
 import Pagination from "../components/common/Pagination.jsx";
-import { LoadingSpinner, EmptyState } from "../components/common/LoadingSpinner.jsx";
-import { Flag, Ban, Check, AlertTriangle, Eye, ShieldAlert } from "lucide-react";
+import {
+  LoadingSpinner,
+  EmptyState,
+} from "../components/common/LoadingSpinner.jsx";
+import {
+  Flag,
+  Ban,
+  Check,
+  AlertTriangle,
+  Eye,
+  ShieldAlert,
+} from "lucide-react";
 
 export default function ReportsPage() {
   const [reports, setReports] = useState([]);
@@ -100,7 +110,8 @@ export default function ReportsPage() {
           <span>Moderation & Reports</span>
         </h1>
         <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Review community flagged behavior, investigate incident reports, and take disciplinary action
+          Review community flagged behavior, investigate incident reports, and
+          take disciplinary action
         </p>
       </div>
 
@@ -129,7 +140,10 @@ export default function ReportsPage() {
               </thead>
               <tbody className="divide-y divide-slate-800/60 text-xs">
                 {reports.map((r) => (
-                  <tr key={r._id} className="hover:bg-slate-800/20 transition-colors">
+                  <tr
+                    key={r._id}
+                    className="hover:bg-slate-800/20 transition-colors"
+                  >
                     {/* Reason */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <Badge variant="danger" size="xs">
@@ -152,9 +166,11 @@ export default function ReportsPage() {
                             "T"
                           )}
                         </div>
-                        <div className="truncate max-w-[140px]">
+                        <div className="truncate max-w-35">
                           <div className="font-semibold text-slate-200 truncate">
-                            {r.reportedUser?.fullname || r.reportedUser?.username || "Account Deleted"}
+                            {r.reportedUser?.fullname ||
+                              r.reportedUser?.username ||
+                              "Account Deleted"}
                           </div>
                           <div className="text-[10px] text-slate-500 truncate">
                             {r.reportedUser?.email || "No email"}
@@ -177,9 +193,11 @@ export default function ReportsPage() {
                             "R"
                           )}
                         </div>
-                        <div className="truncate max-w-[140px]">
+                        <div className="truncate max-w-35">
                           <div className="font-semibold text-slate-300 truncate">
-                            {r.reporter?.fullname || r.reporter?.username || "Unknown"}
+                            {r.reporter?.fullname ||
+                              r.reporter?.username ||
+                              "Unknown"}
                           </div>
                           <div className="text-[10px] text-slate-500 truncate">
                             {r.reporter?.email}
@@ -189,7 +207,7 @@ export default function ReportsPage() {
                     </td>
 
                     {/* Snippet */}
-                    <td className="py-3.5 px-4 max-w-[200px]">
+                    <td className="py-3.5 px-4 max-w-50">
                       <span className="text-slate-400 truncate block text-[11px]">
                         {r.details || "No additional description provided."}
                       </span>
@@ -247,7 +265,10 @@ export default function ReportsPage() {
 
         {/* Pagination */}
         <div className="px-4 pb-4 border-t border-slate-800/60 pt-3">
-          <Pagination pagination={pagination} onPageChange={(p) => setCurrentPage(p)} />
+          <Pagination
+            pagination={pagination}
+            onPageChange={(p) => setCurrentPage(p)}
+          />
         </div>
       </div>
 
@@ -266,13 +287,18 @@ export default function ReportsPage() {
                 <ShieldAlert className="w-5 h-5 text-rose-500 shrink-0" />
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-slate-200">Incident Category:</span>
+                    <span className="text-xs font-semibold text-slate-200">
+                      Incident Category:
+                    </span>
                     <Badge variant="danger" size="xs">
                       {selectedReport.reason}
                     </Badge>
                   </div>
                   <span className="text-[11px] text-slate-500 mt-0.5 block">
-                    Report ID: <span className="font-mono text-slate-400">{selectedReport._id}</span>
+                    Report ID:{" "}
+                    <span className="font-mono text-slate-400">
+                      {selectedReport._id}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -293,7 +319,8 @@ export default function ReportsPage() {
                 Incident Report & Reporter Statement:
               </label>
               <div className="p-3.5 rounded-xl bg-[#0f121d] border border-slate-800 text-xs text-slate-200 leading-relaxed font-sans min-h-20 whitespace-pre-wrap">
-                {selectedReport.details || "No additional written details were attached to this report."}
+                {selectedReport.details ||
+                  "No additional written details were attached to this report."}
               </div>
             </div>
 
@@ -331,7 +358,8 @@ export default function ReportsPage() {
                         "Account Deleted"}
                     </div>
                     <div className="text-xs text-slate-400 truncate">
-                      {selectedReport.reportedUser?.email || "No email available"}
+                      {selectedReport.reportedUser?.email ||
+                        "No email available"}
                     </div>
                     {selectedReport.reportedUser?.username && (
                       <div className="text-[11px] text-purple-400 font-mono">

@@ -4,7 +4,10 @@ import { toast } from "../store/useToastStore.js";
 import Tabs from "../components/common/Tabs.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
-import { LoadingSpinner, EmptyState } from "../components/common/LoadingSpinner.jsx";
+import {
+  LoadingSpinner,
+  EmptyState,
+} from "../components/common/LoadingSpinner.jsx";
 import { MapPin, Globe, Map, Building2, Plus, Trash2 } from "lucide-react";
 
 export default function LocationsPage() {
@@ -23,7 +26,11 @@ export default function LocationsPage() {
   const [actionLoading, setActionLoading] = useState(false);
 
   // Form states
-  const [countryForm, setCountryForm] = useState({ name: "", flag: "🇮🇳", code: "IN" });
+  const [countryForm, setCountryForm] = useState({
+    name: "",
+    flag: "🇮🇳",
+    code: "IN",
+  });
   const [stateForm, setStateForm] = useState({ name: "", country: "" });
   const [cityForm, setCityForm] = useState({ name: "", state: "" });
 
@@ -134,7 +141,8 @@ export default function LocationsPage() {
             <span>Locations Management</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Maintain supported Countries, States, and Cities for user geocoding and filtering
+            Maintain supported Countries, States, and Cities for user geocoding
+            and filtering
           </p>
         </div>
 
@@ -142,7 +150,7 @@ export default function LocationsPage() {
           {activeTab === "countries" && (
             <button
               onClick={() => setAddCountryOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs font-semibold rounded-xl shadow-md transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs font-semibold rounded-xl shadow-md transition-all"
             >
               <Plus className="w-4 h-4" />
               <span>Add Country</span>
@@ -151,10 +159,11 @@ export default function LocationsPage() {
           {activeTab === "states" && (
             <button
               onClick={() => {
-                if (countries.length > 0) setStateForm((p) => ({ ...p, country: countries[0]._id }));
+                if (countries.length > 0)
+                  setStateForm((p) => ({ ...p, country: countries[0]._id }));
                 setAddStateOpen(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs font-semibold rounded-xl shadow-md transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs font-semibold rounded-xl shadow-md transition-all"
             >
               <Plus className="w-4 h-4" />
               <span>Add State</span>
@@ -163,10 +172,11 @@ export default function LocationsPage() {
           {activeTab === "cities" && (
             <button
               onClick={() => {
-                if (states.length > 0) setCityForm((p) => ({ ...p, state: states[0]._id }));
+                if (states.length > 0)
+                  setCityForm((p) => ({ ...p, state: states[0]._id }));
                 setAddCityOpen(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs font-semibold rounded-xl shadow-md transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs font-semibold rounded-xl shadow-md transition-all"
             >
               <Plus className="w-4 h-4" />
               <span>Add City</span>
@@ -178,9 +188,24 @@ export default function LocationsPage() {
       {/* Tabs */}
       <Tabs
         tabs={[
-          { key: "countries", label: "Countries", icon: <Globe className="w-4 h-4" />, count: countries.length },
-          { key: "states", label: "States", icon: <Map className="w-4 h-4" />, count: states.length },
-          { key: "cities", label: "Cities", icon: <Building2 className="w-4 h-4" />, count: cities.length },
+          {
+            key: "countries",
+            label: "Countries",
+            icon: <Globe className="w-4 h-4" />,
+            count: countries.length,
+          },
+          {
+            key: "states",
+            label: "States",
+            icon: <Map className="w-4 h-4" />,
+            count: states.length,
+          },
+          {
+            key: "cities",
+            label: "Cities",
+            icon: <Building2 className="w-4 h-4" />,
+            count: cities.length,
+          },
         ]}
         activeTab={activeTab}
         onChange={(k) => setActiveTab(k)}
@@ -194,7 +219,10 @@ export default function LocationsPage() {
           {activeTab === "countries" && (
             <div className="divide-y divide-slate-800/60">
               {countries.length === 0 ? (
-                <EmptyState title="No countries added" description="Add supported countries first." />
+                <EmptyState
+                  title="No countries added"
+                  description="Add supported countries first."
+                />
               ) : (
                 countries.map((c) => (
                   <div
@@ -206,8 +234,12 @@ export default function LocationsPage() {
                         {c.flag || "🌐"}
                       </span>
                       <div>
-                        <span className="text-sm font-semibold text-slate-100">{c.name}</span>
-                        <span className="text-xs text-slate-500 font-mono ml-2">[{c.code}]</span>
+                        <span className="text-sm font-semibold text-slate-100">
+                          {c.name}
+                        </span>
+                        <span className="text-xs text-slate-500 font-mono ml-2">
+                          [{c.code}]
+                        </span>
                       </div>
                     </div>
                     <button
@@ -226,7 +258,10 @@ export default function LocationsPage() {
           {activeTab === "states" && (
             <div className="divide-y divide-slate-800/60">
               {states.length === 0 ? (
-                <EmptyState title="No states added" description="Add states linked to your countries." />
+                <EmptyState
+                  title="No states added"
+                  description="Add states linked to your countries."
+                />
               ) : (
                 states.map((s) => {
                   const countryObj = countries.find((c) => c._id === s.country);
@@ -236,7 +271,9 @@ export default function LocationsPage() {
                       className="p-4 sm:px-6 flex items-center justify-between hover:bg-slate-800/20 transition-colors"
                     >
                       <div>
-                        <span className="text-sm font-semibold text-slate-100">{s.name}</span>
+                        <span className="text-sm font-semibold text-slate-100">
+                          {s.name}
+                        </span>
                         {countryObj && (
                           <span className="text-xs text-slate-400 ml-2">
                             ({countryObj.flag} {countryObj.name})
@@ -260,7 +297,10 @@ export default function LocationsPage() {
           {activeTab === "cities" && (
             <div className="divide-y divide-slate-800/60">
               {cities.length === 0 ? (
-                <EmptyState title="No cities added" description="Add cities linked to states." />
+                <EmptyState
+                  title="No cities added"
+                  description="Add cities linked to states."
+                />
               ) : (
                 cities.map((city) => {
                   const stateObj = states.find((s) => s._id === city.state);
@@ -270,9 +310,13 @@ export default function LocationsPage() {
                       className="p-4 sm:px-6 flex items-center justify-between hover:bg-slate-800/20 transition-colors"
                     >
                       <div>
-                        <span className="text-sm font-semibold text-slate-100">{city.name}</span>
+                        <span className="text-sm font-semibold text-slate-100">
+                          {city.name}
+                        </span>
                         {stateObj && (
-                          <span className="text-xs text-slate-400 ml-2">in {stateObj.name}</span>
+                          <span className="text-xs text-slate-400 ml-2">
+                            in {stateObj.name}
+                          </span>
                         )}
                       </div>
                       <button
@@ -292,38 +336,57 @@ export default function LocationsPage() {
       )}
 
       {/* ADD COUNTRY MODAL */}
-      <Modal isOpen={addCountryOpen} onClose={() => setAddCountryOpen(false)} title="Add Country">
+      <Modal
+        isOpen={addCountryOpen}
+        onClose={() => setAddCountryOpen(false)}
+        title="Add Country"
+      >
         <form onSubmit={handleCreateCountry} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Country Name *</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Country Name *
+            </label>
             <input
               type="text"
               required
               value={countryForm.name}
-              onChange={(e) => setCountryForm({ ...countryForm, name: e.target.value })}
+              onChange={(e) =>
+                setCountryForm({ ...countryForm, name: e.target.value })
+              }
               placeholder="e.g. Japan"
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Flag Emoji *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Flag Emoji *
+              </label>
               <input
                 type="text"
                 required
                 value={countryForm.flag}
-                onChange={(e) => setCountryForm({ ...countryForm, flag: e.target.value })}
+                onChange={(e) =>
+                  setCountryForm({ ...countryForm, flag: e.target.value })
+                }
                 placeholder="🇯🇵"
-                className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 text-center text-lg"
+                className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 text-center"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Code (ISO) *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Code (ISO) *
+              </label>
               <input
                 type="text"
                 required
                 value={countryForm.code}
-                onChange={(e) => setCountryForm({ ...countryForm, code: e.target.value.toUpperCase() })}
+                onChange={(e) =>
+                  setCountryForm({
+                    ...countryForm,
+                    code: e.target.value.toUpperCase(),
+                  })
+                }
                 placeholder="JP"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 uppercase font-mono"
               />
@@ -349,25 +412,37 @@ export default function LocationsPage() {
       </Modal>
 
       {/* ADD STATE MODAL */}
-      <Modal isOpen={addStateOpen} onClose={() => setAddStateOpen(false)} title="Add State">
+      <Modal
+        isOpen={addStateOpen}
+        onClose={() => setAddStateOpen(false)}
+        title="Add State"
+      >
         <form onSubmit={handleCreateState} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">State Name *</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              State Name *
+            </label>
             <input
               type="text"
               required
               value={stateForm.name}
-              onChange={(e) => setStateForm({ ...stateForm, name: e.target.value })}
+              onChange={(e) =>
+                setStateForm({ ...stateForm, name: e.target.value })
+              }
               placeholder="e.g. Tokyo, California, Tamil Nadu"
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Country *</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Country *
+            </label>
             <select
               required
               value={stateForm.country}
-              onChange={(e) => setStateForm({ ...stateForm, country: e.target.value })}
+              onChange={(e) =>
+                setStateForm({ ...stateForm, country: e.target.value })
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             >
               {countries.map((c) => (
@@ -397,25 +472,37 @@ export default function LocationsPage() {
       </Modal>
 
       {/* ADD CITY MODAL */}
-      <Modal isOpen={addCityOpen} onClose={() => setAddCityOpen(false)} title="Add City">
+      <Modal
+        isOpen={addCityOpen}
+        onClose={() => setAddCityOpen(false)}
+        title="Add City"
+      >
         <form onSubmit={handleCreateCity} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">City Name *</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              City Name *
+            </label>
             <input
               type="text"
               required
               value={cityForm.name}
-              onChange={(e) => setCityForm({ ...cityForm, name: e.target.value })}
+              onChange={(e) =>
+                setCityForm({ ...cityForm, name: e.target.value })
+              }
               placeholder="e.g. Shibuya, San Francisco, Chennai"
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">State *</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              State *
+            </label>
             <select
               required
               value={cityForm.state}
-              onChange={(e) => setCityForm({ ...cityForm, state: e.target.value })}
+              onChange={(e) =>
+                setCityForm({ ...cityForm, state: e.target.value })
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             >
               {states.map((s) => (

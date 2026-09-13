@@ -20,15 +20,39 @@ export default function Sidebar({ onClose }) {
   const { admin, logout } = useAuthStore();
 
   const navItems = [
-    { label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
+    {
+      label: "Dashboard",
+      path: "/dashboard",
+      icon: <LayoutDashboard className="w-4 h-4" />,
+    },
     { label: "Users", path: "/users", icon: <Users className="w-4 h-4" /> },
-    { label: "Categories", path: "/categories", icon: <Tags className="w-4 h-4" /> },
+    {
+      label: "Categories",
+      path: "/categories",
+      icon: <Tags className="w-4 h-4" />,
+    },
     { label: "Titles", path: "/titles", icon: <Film className="w-4 h-4" /> },
-    { label: "Plans & Refills", path: "/plans", icon: <Sparkles className="w-4 h-4" /> },
-    { label: "Payments", path: "/payments", icon: <CreditCard className="w-4 h-4" /> },
+    {
+      label: "Plans & Refills",
+      path: "/plans",
+      icon: <Sparkles className="w-4 h-4" />,
+    },
+    {
+      label: "Payments",
+      path: "/payments",
+      icon: <CreditCard className="w-4 h-4" />,
+    },
     { label: "Reports", path: "/reports", icon: <Flag className="w-4 h-4" /> },
-    { label: "Locations", path: "/locations", icon: <MapPin className="w-4 h-4" /> },
-    { label: "Email Templates", path: "/emails", icon: <Mail className="w-4 h-4" /> },
+    {
+      label: "Locations",
+      path: "/locations",
+      icon: <MapPin className="w-4 h-4" />,
+    },
+    {
+      label: "Email Templates",
+      path: "/emails",
+      icon: <Mail className="w-4 h-4" />,
+    },
   ];
 
   return (
@@ -36,7 +60,7 @@ export default function Sidebar({ onClose }) {
       {/* Brand Header */}
       <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800/80 bg-[#121522]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 to-purple-600 flex items-center justify-center shadow-lg shadow-rose-900/30">
+          <div className="w-8 h-8 rounded-xl bg-linear-to-tr from-rose-600 to-purple-600 flex items-center justify-center shadow-lg shadow-rose-900/30">
             <Shield className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -74,7 +98,7 @@ export default function Sidebar({ onClose }) {
             className={({ isActive }) =>
               `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 isActive
-                  ? "bg-gradient-to-r from-rose-600/90 to-rose-700 text-white shadow-md shadow-rose-950/40"
+                  ? "bg-linear-to-r from-rose-600/90 to-rose-700 text-white shadow-md shadow-rose-950/40"
                   : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
               }`
             }
@@ -96,7 +120,9 @@ export default function Sidebar({ onClose }) {
               <div className="text-xs font-semibold text-slate-200 truncate">
                 {admin?.fullname || "Admin"}
               </div>
-              <div className="text-[10px] text-slate-500 truncate">{admin?.email}</div>
+              <div className="text-[10px] text-slate-500 truncate">
+                {admin?.email}
+              </div>
             </div>
           </div>
 

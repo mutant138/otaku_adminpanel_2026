@@ -40,7 +40,8 @@ export default function DashboardPage() {
     fetchStats();
   }, []);
 
-  if (loading) return <LoadingSpinner size="lg" text="Loading dashboard analytics..." />;
+  if (loading)
+    return <LoadingSpinner size="lg" text="Loading dashboard analytics..." />;
 
   if (error) {
     return (
@@ -50,7 +51,12 @@ export default function DashboardPage() {
     );
   }
 
-  const { counts = {}, recentUsers = [], recentPayments = [], recentReports = [] } = data || {};
+  const {
+    counts = {},
+    recentUsers = [],
+    recentPayments = [],
+    recentReports = [],
+  } = data || {};
 
   const statCards = [
     {
@@ -121,7 +127,7 @@ export default function DashboardPage() {
           </Link>
           <Link
             to="/titles"
-            className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-xs font-semibold text-white rounded-xl shadow-md shadow-rose-950/40 transition-all"
+            className="flex items-center gap-1.5 px-3 py-2 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-xs font-semibold text-white rounded-xl shadow-md shadow-rose-950/40 transition-all"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Title</span>
@@ -160,7 +166,9 @@ export default function DashboardPage() {
         {/* Recent Registrations */}
         <div className="p-5 rounded-2xl bg-[#121522] border border-slate-800/80">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-slate-200">Recent Users</h3>
+            <h3 className="text-sm font-semibold text-slate-200">
+              Recent Users
+            </h3>
             <Link
               to="/users"
               className="text-xs text-rose-400 hover:text-rose-300 flex items-center gap-1"
@@ -172,7 +180,9 @@ export default function DashboardPage() {
 
           <div className="space-y-2.5">
             {recentUsers.length === 0 ? (
-              <p className="text-xs text-slate-500 py-4 text-center">No users registered yet.</p>
+              <p className="text-xs text-slate-500 py-4 text-center">
+                No users registered yet.
+              </p>
             ) : (
               recentUsers.map((u) => (
                 <div
@@ -182,7 +192,11 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-3 overflow-hidden">
                     <div className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center font-bold text-slate-300 text-xs shrink-0 overflow-hidden">
                       {u.avatar ? (
-                        <img src={u.avatar} alt="" className="w-full h-full object-cover" />
+                        <img
+                          src={u.avatar}
+                          alt=""
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         u.fullname?.[0] || u.username?.[0] || "U"
                       )}
@@ -202,7 +216,9 @@ export default function DashboardPage() {
                           </Badge>
                         )}
                       </div>
-                      <div className="text-[11px] text-slate-500 truncate">{u.email}</div>
+                      <div className="text-[11px] text-slate-500 truncate">
+                        {u.email}
+                      </div>
                     </div>
                   </div>
                   <span className="text-[11px] text-slate-500 shrink-0">
@@ -217,7 +233,9 @@ export default function DashboardPage() {
         {/* Recent Transactions */}
         <div className="p-5 rounded-2xl bg-[#121522] border border-slate-800/80">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-slate-200">Recent Payments</h3>
+            <h3 className="text-sm font-semibold text-slate-200">
+              Recent Payments
+            </h3>
             <Link
               to="/payments"
               className="text-xs text-rose-400 hover:text-rose-300 flex items-center gap-1"
@@ -229,7 +247,9 @@ export default function DashboardPage() {
 
           <div className="space-y-2.5">
             {recentPayments.length === 0 ? (
-              <p className="text-xs text-slate-500 py-4 text-center">No payments recorded yet.</p>
+              <p className="text-xs text-slate-500 py-4 text-center">
+                No payments recorded yet.
+              </p>
             ) : (
               recentPayments.map((p) => (
                 <div
@@ -289,16 +309,23 @@ export default function DashboardPage() {
               >
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="font-semibold text-rose-400">{r.reason}</span>
+                    <span className="font-semibold text-rose-400">
+                      {r.reason}
+                    </span>
                     <span className="text-[10px] text-slate-500">
                       {new Date(r.createdAt).toLocaleDateString()}
                     </span>
                   </div>
-                  <p className="text-slate-300 text-[11px] line-clamp-2">{r.details || "No details provided"}</p>
+                  <p className="text-slate-300 text-[11px] line-clamp-2">
+                    {r.details || "No details provided"}
+                  </p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400">
                   <span>Reported: {r.reportedUser?.fullname || "User"}</span>
-                  <Link to="/reports" className="text-rose-400 font-semibold hover:underline">
+                  <Link
+                    to="/reports"
+                    className="text-rose-400 font-semibold hover:underline"
+                  >
                     Action
                   </Link>
                 </div>

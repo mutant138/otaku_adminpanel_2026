@@ -5,7 +5,10 @@ import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
 import Pagination from "../components/common/Pagination.jsx";
-import { LoadingSpinner, EmptyState } from "../components/common/LoadingSpinner.jsx";
+import {
+  LoadingSpinner,
+  EmptyState,
+} from "../components/common/LoadingSpinner.jsx";
 import {
   Users,
   Search,
@@ -149,7 +152,10 @@ export default function UsersPage() {
       const payload = { ...formData };
       if (!payload.password) delete payload.password;
 
-      const res = await api.put(`/users/${selectedUser.id || selectedUser._id}`, payload);
+      const res = await api.put(
+        `/users/${selectedUser.id || selectedUser._id}`,
+        payload,
+      );
       if (res.status) {
         toast.success("User updated successfully");
         setEditModalOpen(false);
@@ -166,7 +172,9 @@ export default function UsersPage() {
     if (!selectedUser) return;
     setActionLoading(true);
     try {
-      const res = await api.delete(`/users/${selectedUser.id || selectedUser._id}`);
+      const res = await api.delete(
+        `/users/${selectedUser.id || selectedUser._id}`,
+      );
       if (res.status) {
         toast.success("User deleted successfully");
         setDeleteModalOpen(false);
@@ -195,7 +203,7 @@ export default function UsersPage() {
 
         <button
           onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>Create New User</span>
@@ -297,22 +305,31 @@ export default function UsersPage() {
               </thead>
               <tbody className="divide-y divide-slate-800/60 text-xs">
                 {users.map((u) => (
-                  <tr key={u.id || u._id} className="hover:bg-slate-800/30 transition-colors">
+                  <tr
+                    key={u.id || u._id}
+                    className="hover:bg-slate-800/30 transition-colors"
+                  >
                     {/* User info */}
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center font-bold text-slate-300 text-xs shrink-0 overflow-hidden border border-slate-700/50">
                           {u.avatar ? (
-                            <img src={u.avatar} alt="" className="w-full h-full object-cover" />
+                            <img
+                              src={u.avatar}
+                              alt=""
+                              className="w-full h-full object-cover"
+                            />
                           ) : (
                             u.fullname?.[0] || u.username?.[0] || "U"
                           )}
                         </div>
-                        <div className="truncate max-w-[180px] sm:max-w-[220px]">
+                        <div className="truncate max-w-45 sm:max-w-55">
                           <div className="font-semibold text-slate-100 truncate">
                             {u.fullname || u.username || "Anonymous"}
                           </div>
-                          <div className="text-[11px] text-slate-400 truncate">{u.email}</div>
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {u.email}
+                          </div>
                           <div className="text-[10px] text-slate-500 font-mono">
                             ID: {u.userId || u.id?.substring(0, 8)}
                           </div>
@@ -365,15 +382,32 @@ export default function UsersPage() {
                     {/* Balances */}
                     <td className="py-3.5 px-3 text-[11px] text-slate-300">
                       <div className="space-y-0.5">
-                        <div>Compliments: <span className="font-semibold text-rose-400">{u.complimentsBalance ?? 0}</span></div>
-                        <div>Super Likes: <span className="font-semibold text-amber-400">{u.superLikesBalance ?? 0}</span></div>
-                        <div>Extra Swipes: <span className="font-semibold text-sky-400">{u.extraSwipesBalance ?? 0}</span></div>
+                        <div>
+                          Compliments:{" "}
+                          <span className="font-semibold text-rose-400">
+                            {u.complimentsBalance ?? 0}
+                          </span>
+                        </div>
+                        <div>
+                          Super Likes:{" "}
+                          <span className="font-semibold text-amber-400">
+                            {u.superLikesBalance ?? 0}
+                          </span>
+                        </div>
+                        <div>
+                          Extra Swipes:{" "}
+                          <span className="font-semibold text-sky-400">
+                            {u.extraSwipesBalance ?? 0}
+                          </span>
+                        </div>
                       </div>
                     </td>
 
                     {/* Joined */}
                     <td className="py-3.5 px-3 text-[11px] text-slate-400 whitespace-nowrap">
-                      {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "—"}
+                      {u.createdAt
+                        ? new Date(u.createdAt).toLocaleDateString()
+                        : "—"}
                     </td>
 
                     {/* Actions */}
@@ -420,22 +454,30 @@ export default function UsersPage() {
         <form onSubmit={handleCreateSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Full Name
+              </label>
               <input
                 type="text"
                 value={formData.fullname}
-                onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, fullname: e.target.value })
+                }
                 placeholder="Tanjiro Kamado"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Email *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Email *
+              </label>
               <input
                 type="email"
                 required
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 placeholder="user@example.com"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
@@ -444,21 +486,29 @@ export default function UsersPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Username (Optional)</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Username (Optional)
+              </label>
               <input
                 type="text"
                 value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
                 placeholder="Leave blank to autogenerate"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Password</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Password
+              </label>
               <input
                 type="password"
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
                 placeholder="Set user password"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
@@ -467,10 +517,14 @@ export default function UsersPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Role</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Role
+              </label>
               <select
                 value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, role: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="user">User</option>
@@ -478,10 +532,17 @@ export default function UsersPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Verified</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Verified
+              </label>
               <select
                 value={formData.isVerified ? "true" : "false"}
-                onChange={(e) => setFormData({ ...formData, isVerified: e.target.value === "true" })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    isVerified: e.target.value === "true",
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="true">Yes</option>
@@ -489,10 +550,17 @@ export default function UsersPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Premium</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Premium
+              </label>
               <select
                 value={formData.isPremium ? "true" : "false"}
-                onChange={(e) => setFormData({ ...formData, isPremium: e.target.value === "true" })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    isPremium: e.target.value === "true",
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="false">No</option>
@@ -500,10 +568,14 @@ export default function UsersPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Is Bot</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Is Bot
+              </label>
               <select
                 value={formData.isBot ? "true" : "false"}
-                onChange={(e) => setFormData({ ...formData, isBot: e.target.value === "true" })}
+                onChange={(e) =>
+                  setFormData({ ...formData, isBot: e.target.value === "true" })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="false">Human</option>
@@ -514,32 +586,53 @@ export default function UsersPage() {
 
           <div className="grid grid-cols-3 gap-3 pt-2">
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Compliments</label>
+              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                Compliments
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.complimentsBalance}
-                onChange={(e) => setFormData({ ...formData, complimentsBalance: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    complimentsBalance: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Super Likes</label>
+              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                Super Likes
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.superLikesBalance}
-                onChange={(e) => setFormData({ ...formData, superLikesBalance: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    superLikesBalance: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Extra Swipes</label>
+              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                Extra Swipes
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.extraSwipesBalance}
-                onChange={(e) => setFormData({ ...formData, extraSwipesBalance: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    extraSwipesBalance: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
@@ -573,20 +666,28 @@ export default function UsersPage() {
         <form onSubmit={handleEditSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Full Name
+              </label>
               <input
                 type="text"
                 value={formData.fullname}
-                onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, fullname: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Username</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Username
+              </label>
               <input
                 type="text"
                 value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
@@ -594,11 +695,15 @@ export default function UsersPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Email</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Email
+              </label>
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
@@ -609,7 +714,9 @@ export default function UsersPage() {
               <input
                 type="password"
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
                 placeholder="••••••••"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
@@ -618,10 +725,14 @@ export default function UsersPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Role</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Role
+              </label>
               <select
                 value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, role: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="user">User</option>
@@ -629,10 +740,17 @@ export default function UsersPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Verified</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Verified
+              </label>
               <select
                 value={formData.isVerified ? "true" : "false"}
-                onChange={(e) => setFormData({ ...formData, isVerified: e.target.value === "true" })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    isVerified: e.target.value === "true",
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="true">Yes</option>
@@ -640,10 +758,17 @@ export default function UsersPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Premium</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Premium
+              </label>
               <select
                 value={formData.isPremium ? "true" : "false"}
-                onChange={(e) => setFormData({ ...formData, isPremium: e.target.value === "true" })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    isPremium: e.target.value === "true",
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="false">No</option>
@@ -651,10 +776,14 @@ export default function UsersPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Is Bot</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Is Bot
+              </label>
               <select
                 value={formData.isBot ? "true" : "false"}
-                onChange={(e) => setFormData({ ...formData, isBot: e.target.value === "true" })}
+                onChange={(e) =>
+                  setFormData({ ...formData, isBot: e.target.value === "true" })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="false">Human</option>
@@ -665,32 +794,53 @@ export default function UsersPage() {
 
           <div className="grid grid-cols-3 gap-3 pt-2">
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Compliments</label>
+              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                Compliments
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.complimentsBalance}
-                onChange={(e) => setFormData({ ...formData, complimentsBalance: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    complimentsBalance: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Super Likes</label>
+              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                Super Likes
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.superLikesBalance}
-                onChange={(e) => setFormData({ ...formData, superLikesBalance: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    superLikesBalance: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Extra Swipes</label>
+              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                Extra Swipes
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.extraSwipesBalance}
-                onChange={(e) => setFormData({ ...formData, extraSwipesBalance: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    extraSwipesBalance: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>

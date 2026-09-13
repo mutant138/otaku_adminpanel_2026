@@ -5,8 +5,20 @@ import Tabs from "../components/common/Tabs.jsx";
 import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
-import { LoadingSpinner, EmptyState } from "../components/common/LoadingSpinner.jsx";
-import { Film, Gamepad2, Plus, Edit2, Trash2, Search, Star, Image as ImageIcon } from "lucide-react";
+import {
+  LoadingSpinner,
+  EmptyState,
+} from "../components/common/LoadingSpinner.jsx";
+import {
+  Film,
+  Gamepad2,
+  Plus,
+  Edit2,
+  Trash2,
+  Search,
+  Star,
+  Image as ImageIcon,
+} from "lucide-react";
 
 export default function TitlesPage() {
   const [activeTab, setActiveTab] = useState("anime"); // 'anime' | 'game'
@@ -61,14 +73,17 @@ export default function TitlesPage() {
   }, []);
 
   const currentTitles = activeTab === "anime" ? animeTitles : gameTitles;
-  const currentCategories = activeTab === "anime" ? animeCategories : gameCategories;
+  const currentCategories =
+    activeTab === "anime" ? animeCategories : gameCategories;
 
   // Filtered titles list
   const filteredTitles = currentTitles.filter((t) => {
-    const matchesSearch = !search.trim() || t.title.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch =
+      !search.trim() || t.title.toLowerCase().includes(search.toLowerCase());
     const matchesCategory =
       !categoryFilter ||
-      (t.categories && t.categories.some((c) => (c._id || c) === categoryFilter));
+      (t.categories &&
+        t.categories.some((c) => (c._id || c) === categoryFilter));
     return matchesSearch && matchesCategory;
   });
 
@@ -176,16 +191,19 @@ export default function TitlesPage() {
             <span>Title Catalog Management</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Maintain official anime series and video game titles for user favorite selections
+            Maintain official anime series and video game titles for user
+            favorite selections
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
         >
           <Plus className="w-4 h-4" />
-          <span>Add {activeTab === "anime" ? "Anime Title" : "Game Title"}</span>
+          <span>
+            Add {activeTab === "anime" ? "Anime Title" : "Game Title"}
+          </span>
         </button>
       </div>
 
@@ -285,7 +303,9 @@ export default function TitlesPage() {
               {/* Body */}
               <div className="p-4 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-100 truncate">{item.title}</h3>
+                  <h3 className="text-sm font-bold text-slate-100 truncate">
+                    {item.title}
+                  </h3>
                   <div className="flex flex-wrap gap-1 mt-2">
                     {item.categories && item.categories.length > 0 ? (
                       item.categories.map((c) => (
@@ -294,7 +314,9 @@ export default function TitlesPage() {
                         </Badge>
                       ))
                     ) : (
-                      <span className="text-[11px] text-slate-500">Uncategorized</span>
+                      <span className="text-[11px] text-slate-500">
+                        Uncategorized
+                      </span>
                     )}
                   </div>
                 </div>
@@ -330,41 +352,62 @@ export default function TitlesPage() {
       >
         <form onSubmit={handleCreateSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Title Name *</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Title Name *
+            </label>
             <input
               type="text"
               required
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder={activeTab === "anime" ? "e.g. Solo Leveling, Attack on Titan" : "e.g. Elden Ring, Valorant"}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
+              placeholder={
+                activeTab === "anime"
+                  ? "e.g. Solo Leveling, Attack on Titan"
+                  : "e.g. Elden Ring, Valorant"
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Image Thumbnail URL</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Image Thumbnail URL
+            </label>
             <input
               type="url"
               value={formData.image}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, image: e.target.value })
+              }
               placeholder="https://images.unsplash.com/..."
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Popularity Rating</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Popularity Rating
+            </label>
             <input
               type="number"
               min="0"
               value={formData.popularity}
-              onChange={(e) => setFormData({ ...formData, popularity: parseInt(e.target.value, 10) || 0 })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  popularity: parseInt(e.target.value, 10) || 0,
+                })
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Assign Categories</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              Assign Categories
+            </label>
             <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-2 bg-[#161a29] border border-slate-700 rounded-xl">
               {currentCategories.map((cat) => {
                 const isSelected = formData.categories.includes(cat._id);
@@ -413,39 +456,56 @@ export default function TitlesPage() {
       >
         <form onSubmit={handleEditSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Title Name</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Title Name
+            </label>
             <input
               type="text"
               required
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Image Thumbnail URL</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Image Thumbnail URL
+            </label>
             <input
               type="url"
               value={formData.image}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, image: e.target.value })
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Popularity Rating</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Popularity Rating
+            </label>
             <input
               type="number"
               min="0"
               value={formData.popularity}
-              onChange={(e) => setFormData({ ...formData, popularity: parseInt(e.target.value, 10) || 0 })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  popularity: parseInt(e.target.value, 10) || 0,
+                })
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Assign Categories</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              Assign Categories
+            </label>
             <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-2 bg-[#161a29] border border-slate-700 rounded-xl">
               {currentCategories.map((cat) => {
                 const isSelected = formData.categories.includes(cat._id);

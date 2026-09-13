@@ -4,7 +4,10 @@ import { toast } from "../store/useToastStore.js";
 import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
-import { LoadingSpinner, EmptyState } from "../components/common/LoadingSpinner.jsx";
+import {
+  LoadingSpinner,
+  EmptyState,
+} from "../components/common/LoadingSpinner.jsx";
 import { Sparkles, Plus, Edit2, Trash2, Check, Crown } from "lucide-react";
 
 export default function PlansPage() {
@@ -67,7 +70,10 @@ export default function PlansPage() {
       durationDays: plan.durationDays || 0,
       complimentsRefill: plan.complimentsRefill || 0,
       isPremium: Boolean(plan.isPremium),
-      benefits: plan.benefits && plan.benefits.length > 0 ? plan.benefits : [{ text: "", iconName: "check" }],
+      benefits:
+        plan.benefits && plan.benefits.length > 0
+          ? plan.benefits
+          : [{ text: "", iconName: "check" }],
     });
     setEditModalOpen(true);
   };
@@ -159,13 +165,14 @@ export default function PlansPage() {
             <span>Monetization & Plans</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Configure consumable refills (Mana Drops) and premium subscriptions (Otaku Pass)
+            Configure consumable refills (Mana Drops) and premium subscriptions
+            (Otaku Pass)
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>Create New Plan</span>
@@ -186,7 +193,9 @@ export default function PlansPage() {
           {plans.map((p) => {
             const discountPercent =
               p.originalPrice > p.price
-                ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
+                ? Math.round(
+                    ((p.originalPrice - p.price) / p.originalPrice) * 100,
+                  )
                 : 0;
 
             return (
@@ -198,7 +207,9 @@ export default function PlansPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-base text-slate-100">{p.name}</span>
+                        <span className="font-bold text-base text-slate-100">
+                          {p.name}
+                        </span>
                         {p.isPremium && (
                           <Badge variant="purple" size="xs">
                             <Crown className="w-2.5 h-2.5" />
@@ -206,7 +217,9 @@ export default function PlansPage() {
                           </Badge>
                         )}
                       </div>
-                      <span className="text-[11px] text-slate-500 font-mono">ID: {p.planId}</span>
+                      <span className="text-[11px] text-slate-500 font-mono">
+                        ID: {p.planId}
+                      </span>
                     </div>
 
                     <div className="flex items-center gap-1">
@@ -229,7 +242,9 @@ export default function PlansPage() {
 
                   {/* Price Tag */}
                   <div className="mt-4 flex items-baseline gap-2">
-                    <span className="text-3xl font-extrabold text-white">₹{p.price}</span>
+                    <span className="text-3xl font-extrabold text-white">
+                      ₹{p.price}
+                    </span>
                     {p.originalPrice > p.price && (
                       <span className="text-sm line-through text-slate-500 font-medium">
                         ₹{p.originalPrice}
@@ -242,12 +257,19 @@ export default function PlansPage() {
                     )}
                   </div>
 
-                  <p className="text-xs text-slate-400 mt-2">{p.description || "—"}</p>
+                  <p className="text-xs text-slate-400 mt-2">
+                    {p.description || "—"}
+                  </p>
 
                   {/* Attributes Badges */}
                   <div className="flex items-center gap-2 mt-3 flex-wrap">
-                    <Badge variant={p.type === "subscription" ? "purple" : "info"} size="xs">
-                      {p.type === "subscription" ? `Subscription (${p.durationDays}d)` : "Refill Pack"}
+                    <Badge
+                      variant={p.type === "subscription" ? "purple" : "info"}
+                      size="xs"
+                    >
+                      {p.type === "subscription"
+                        ? `Subscription (${p.durationDays}d)`
+                        : "Refill Pack"}
                     </Badge>
                     {p.complimentsRefill > 0 && (
                       <Badge variant="warning" size="xs">
@@ -263,7 +285,10 @@ export default function PlansPage() {
                         Included Perks:
                       </div>
                       {p.benefits.map((b, i) => (
-                        <div key={i} className="flex items-center gap-2 text-xs text-slate-300">
+                        <div
+                          key={i}
+                          className="flex items-center gap-2 text-xs text-slate-300"
+                        >
                           <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                           <span>{b.text}</span>
                         </div>
@@ -273,7 +298,8 @@ export default function PlansPage() {
                 </div>
 
                 <div className="mt-5 pt-3 border-t border-slate-800/80 text-[11px] text-slate-500">
-                  Updated {new Date(p.updatedAt || p.createdAt).toLocaleDateString()}
+                  Updated{" "}
+                  {new Date(p.updatedAt || p.createdAt).toLocaleDateString()}
                 </div>
               </div>
             );
@@ -282,27 +308,39 @@ export default function PlansPage() {
       )}
 
       {/* CREATE PLAN MODAL */}
-      <Modal isOpen={createModalOpen} onClose={() => setCreateModalOpen(false)} title="Create New Plan">
+      <Modal
+        isOpen={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        title="Create New Plan"
+      >
         <form onSubmit={handleCreateSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Plan ID (Unique slug) *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Plan ID (Unique slug) *
+              </label>
               <input
                 type="text"
                 required
                 value={formData.planId}
-                onChange={(e) => setFormData({ ...formData, planId: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, planId: e.target.value })
+                }
                 placeholder="e.g. mana-drop, otaku-pass"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Plan Display Name *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Plan Display Name *
+              </label>
               <input
                 type="text"
                 required
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 placeholder="e.g. Mana Drop 10x"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
@@ -311,32 +349,47 @@ export default function PlansPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Price (₹ INR) *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Price (₹ INR) *
+              </label>
               <input
                 type="number"
                 required
                 min="0"
                 value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: Number(e.target.value) })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Original Price (₹)</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Original Price (₹)
+              </label>
               <input
                 type="number"
                 required
                 min="0"
                 value={formData.originalPrice}
-                onChange={(e) => setFormData({ ...formData, originalPrice: Number(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    originalPrice: Number(e.target.value),
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Type</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Type
+              </label>
               <select
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="refill">Refill Pack</option>
@@ -347,31 +400,52 @@ export default function PlansPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Duration (Days)</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Duration (Days)
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.durationDays}
-                onChange={(e) => setFormData({ ...formData, durationDays: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    durationDays: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 placeholder="0 for refills"
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Compliments Refill</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Compliments Refill
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.complimentsRefill}
-                onChange={(e) => setFormData({ ...formData, complimentsRefill: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    complimentsRefill: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Grants Premium?</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Grants Premium?
+              </label>
               <select
                 value={formData.isPremium ? "true" : "false"}
-                onChange={(e) => setFormData({ ...formData, isPremium: e.target.value === "true" })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    isPremium: e.target.value === "true",
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="false">No (Refill only)</option>
@@ -381,11 +455,15 @@ export default function PlansPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Description</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Description
+            </label>
             <input
               type="text"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="Unlock unlimited swipes and see who liked you"
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
@@ -394,7 +472,9 @@ export default function PlansPage() {
           {/* Benefits Builder */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-semibold text-slate-300">Plan Benefits / Perks</label>
+              <label className="text-xs font-semibold text-slate-300">
+                Plan Benefits / Perks
+              </label>
               <button
                 type="button"
                 onClick={addBenefitRow}
@@ -410,7 +490,9 @@ export default function PlansPage() {
                     type="text"
                     required
                     value={b.text}
-                    onChange={(e) => handleBenefitChange(i, "text", e.target.value)}
+                    onChange={(e) =>
+                      handleBenefitChange(i, "text", e.target.value)
+                    }
                     placeholder="e.g. 5 Free Compliments"
                     className="flex-1 px-3 py-1.5 bg-[#161a29] border border-slate-700 rounded-lg text-xs text-slate-100"
                   />
@@ -446,26 +528,38 @@ export default function PlansPage() {
       </Modal>
 
       {/* EDIT PLAN MODAL */}
-      <Modal isOpen={editModalOpen} onClose={() => setEditModalOpen(false)} title={`Edit Plan: ${selectedPlan?.name}`}>
+      <Modal
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        title={`Edit Plan: ${selectedPlan?.name}`}
+      >
         <form onSubmit={handleEditSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Plan ID</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Plan ID
+              </label>
               <input
                 type="text"
                 required
                 value={formData.planId}
-                onChange={(e) => setFormData({ ...formData, planId: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, planId: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100 font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Plan Display Name</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Plan Display Name
+              </label>
               <input
                 type="text"
                 required
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
@@ -473,32 +567,47 @@ export default function PlansPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Price (₹)</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Price (₹)
+              </label>
               <input
                 type="number"
                 required
                 min="0"
                 value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: Number(e.target.value) })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Original Price (₹)</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Original Price (₹)
+              </label>
               <input
                 type="number"
                 required
                 min="0"
                 value={formData.originalPrice}
-                onChange={(e) => setFormData({ ...formData, originalPrice: Number(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    originalPrice: Number(e.target.value),
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Type</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Type
+              </label>
               <select
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="refill">Refill Pack</option>
@@ -509,30 +618,51 @@ export default function PlansPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Duration (Days)</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Duration (Days)
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.durationDays}
-                onChange={(e) => setFormData({ ...formData, durationDays: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    durationDays: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Compliments Refill</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Compliments Refill
+              </label>
               <input
                 type="number"
                 min="0"
                 value={formData.complimentsRefill}
-                onChange={(e) => setFormData({ ...formData, complimentsRefill: parseInt(e.target.value, 10) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    complimentsRefill: parseInt(e.target.value, 10) || 0,
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Grants Premium?</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Grants Premium?
+              </label>
               <select
                 value={formData.isPremium ? "true" : "false"}
-                onChange={(e) => setFormData({ ...formData, isPremium: e.target.value === "true" })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    isPremium: e.target.value === "true",
+                  })
+                }
                 className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
               >
                 <option value="false">No (Refill only)</option>
@@ -542,18 +672,24 @@ export default function PlansPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Description</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Description
+            </label>
             <input
               type="text"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-semibold text-slate-300">Plan Benefits</label>
+              <label className="text-xs font-semibold text-slate-300">
+                Plan Benefits
+              </label>
               <button
                 type="button"
                 onClick={addBenefitRow}
@@ -569,7 +705,9 @@ export default function PlansPage() {
                     type="text"
                     required
                     value={b.text}
-                    onChange={(e) => handleBenefitChange(i, "text", e.target.value)}
+                    onChange={(e) =>
+                      handleBenefitChange(i, "text", e.target.value)
+                    }
                     className="flex-1 px-3 py-1.5 bg-[#161a29] border border-slate-700 rounded-lg text-xs text-slate-100"
                   />
                   <button

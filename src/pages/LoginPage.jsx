@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/useAuthStore.js";
 import { toast } from "../store/useToastStore.js";
-import { Shield, Lock, Mail, ArrowRight, Eye, EyeOff, AlertCircle } from "lucide-react";
+import {
+  Shield,
+  Lock,
+  Mail,
+  ArrowRight,
+  Eye,
+  EyeOff,
+  AlertCircle,
+} from "lucide-react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -41,7 +49,9 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    toast.info("Google OAuth is configured for admin scaffolding but currently inactive. Please sign in with email & password.");
+    toast.info(
+      "Google OAuth is configured for admin scaffolding but currently inactive. Please sign in with email & password.",
+    );
   };
 
   return (
@@ -53,10 +63,12 @@ export default function LoginPage() {
       <div className="w-full max-w-md relative z-10 animate-fade-in">
         {/* Logo and Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex p-3 rounded-2xl bg-gradient-to-tr from-rose-600 to-purple-600 shadow-xl shadow-rose-950/40 mb-3.5">
+          <div className="inline-flex p-3 rounded-2xl bg-linear-to-tr from-rose-600 to-purple-600 shadow-xl shadow-rose-950/40 mb-3.5">
             <Shield className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight">OtakuDuo Admin</h1>
+          <h1 className="text-2xl font-bold text-slate-100 tracking-tight">
+            OtakuDuo Admin
+          </h1>
           <p className="text-sm text-slate-400 mt-1">
             Authenticate to access the administrative control portal
           </p>
@@ -110,7 +122,11 @@ export default function LoginPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -119,9 +135,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 py-2.5 px-4 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 flex items-center justify-center gap-2 transition-all disabled:opacity-60"
+              className="w-full mt-2 py-2.5 px-4 bg-linear-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 flex items-center justify-center gap-2 transition-all disabled:opacity-60"
             >
-              <span>{loading ? "Authenticating..." : "Sign In to Admin Portal"}</span>
+              <span>
+                {loading ? "Authenticating..." : "Sign In to Admin Portal"}
+              </span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -132,7 +150,9 @@ export default function LoginPage() {
               <div className="w-full border-t border-slate-800" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-[#121520] px-3 text-slate-500">Or continue with</span>
+              <span className="bg-[#121520] px-3 text-slate-500">
+                Or continue with
+              </span>
             </div>
           </div>
 
@@ -171,7 +191,10 @@ export default function LoginPage() {
           {/* Quick Demo Credentials Hint */}
           <div className="mt-6 pt-5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
             <div>
-              Default: <span className="text-slate-300 font-mono">admin@otakuduo.com</span>
+              Default:{" "}
+              <span className="text-slate-300 font-mono">
+                admin@otakuduo.com
+              </span>
             </div>
             <button
               type="button"

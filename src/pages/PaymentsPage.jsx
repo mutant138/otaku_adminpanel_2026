@@ -4,8 +4,18 @@ import { toast } from "../store/useToastStore.js";
 import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import Pagination from "../components/common/Pagination.jsx";
-import { LoadingSpinner, EmptyState } from "../components/common/LoadingSpinner.jsx";
-import { CreditCard, Search, Eye, CheckCircle2, AlertCircle, Clock } from "lucide-react";
+import {
+  LoadingSpinner,
+  EmptyState,
+} from "../components/common/LoadingSpinner.jsx";
+import {
+  CreditCard,
+  Search,
+  Eye,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+} from "lucide-react";
 
 export default function PaymentsPage() {
   const [payments, setPayments] = useState([]);
@@ -174,21 +184,32 @@ export default function PaymentsPage() {
               </thead>
               <tbody className="divide-y divide-slate-800/60 text-xs">
                 {payments.map((p) => (
-                  <tr key={p._id} className="hover:bg-slate-800/30 transition-colors">
+                  <tr
+                    key={p._id}
+                    className="hover:bg-slate-800/30 transition-colors"
+                  >
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
                         <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center font-bold text-slate-300 text-xs shrink-0 overflow-hidden">
                           {p.user?.avatar ? (
-                            <img src={p.user.avatar} alt="" className="w-full h-full object-cover" />
+                            <img
+                              src={p.user.avatar}
+                              alt=""
+                              className="w-full h-full object-cover"
+                            />
                           ) : (
                             p.user?.fullname?.[0] || p.user?.email?.[0] || "U"
                           )}
                         </div>
-                        <div className="truncate max-w-[160px]">
+                        <div className="truncate max-w-40">
                           <div className="font-semibold text-slate-200 truncate">
-                            {p.user?.fullname || p.user?.username || "Anonymous"}
+                            {p.user?.fullname ||
+                              p.user?.username ||
+                              "Anonymous"}
                           </div>
-                          <div className="text-[11px] text-slate-500 truncate">{p.user?.email}</div>
+                          <div className="text-[11px] text-slate-500 truncate">
+                            {p.user?.email}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -205,7 +226,7 @@ export default function PaymentsPage() {
 
                     <td className="py-3.5 px-3">{getStatusBadge(p.status)}</td>
 
-                    <td className="py-3.5 px-3 font-mono text-[11px] text-slate-400 max-w-[140px] truncate">
+                    <td className="py-3.5 px-3 font-mono text-[11px] text-slate-400 max-w-35 truncate">
                       {p.razorpay_payment_id || "—"}
                     </td>
 
@@ -230,7 +251,10 @@ export default function PaymentsPage() {
         )}
 
         <div className="px-4 pb-4">
-          <Pagination pagination={pagination} onPageChange={(p) => setCurrentPage(p)} />
+          <Pagination
+            pagination={pagination}
+            onPageChange={(p) => setCurrentPage(p)}
+          />
         </div>
       </div>
 
@@ -245,13 +269,17 @@ export default function PaymentsPage() {
             {/* Amount and Status Banner */}
             <div className="p-4 rounded-xl bg-[#161a29] border border-slate-800 flex items-center justify-between">
               <div>
-                <span className="text-xs text-slate-500 uppercase tracking-wider block">Total Amount</span>
+                <span className="text-xs text-slate-500 uppercase tracking-wider block">
+                  Total Amount
+                </span>
                 <span className="text-2xl font-extrabold text-emerald-400">
                   ₹{Math.round(selectedPayment.amount / 100)}
                 </span>
               </div>
               <div className="text-right">
-                <span className="text-xs text-slate-500 uppercase tracking-wider block mb-1">Status</span>
+                <span className="text-xs text-slate-500 uppercase tracking-wider block mb-1">
+                  Status
+                </span>
                 {getStatusBadge(selectedPayment.status)}
               </div>
             </div>
@@ -260,19 +288,27 @@ export default function PaymentsPage() {
             <div className="space-y-2.5 text-xs text-slate-300">
               <div className="flex justify-between py-1.5 border-b border-slate-800">
                 <span className="text-slate-500">Plan Selected</span>
-                <span className="font-mono text-purple-400 font-semibold">{selectedPayment.planId}</span>
+                <span className="font-mono text-purple-400 font-semibold">
+                  {selectedPayment.planId}
+                </span>
               </div>
               <div className="flex justify-between py-1.5 border-b border-slate-800">
                 <span className="text-slate-500">User Email</span>
-                <span className="text-slate-200">{selectedPayment.user?.email || "Unknown"}</span>
+                <span className="text-slate-200">
+                  {selectedPayment.user?.email || "Unknown"}
+                </span>
               </div>
               <div className="flex justify-between py-1.5 border-b border-slate-800">
                 <span className="text-slate-500">Razorpay Order ID</span>
-                <span className="font-mono text-slate-300">{selectedPayment.razorpay_order_id}</span>
+                <span className="font-mono text-slate-300">
+                  {selectedPayment.razorpay_order_id}
+                </span>
               </div>
               <div className="flex justify-between py-1.5 border-b border-slate-800">
                 <span className="text-slate-500">Razorpay Payment ID</span>
-                <span className="font-mono text-slate-300">{selectedPayment.razorpay_payment_id}</span>
+                <span className="font-mono text-slate-300">
+                  {selectedPayment.razorpay_payment_id}
+                </span>
               </div>
               <div className="flex justify-between py-1.5 border-b border-slate-800">
                 <span className="text-slate-500">Transaction Time</span>
@@ -290,7 +326,9 @@ export default function PaymentsPage() {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  disabled={actionLoading || selectedPayment.status === "verified"}
+                  disabled={
+                    actionLoading || selectedPayment.status === "verified"
+                  }
                   onClick={() => handleStatusUpdate("verified")}
                   className="px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-800/50 text-emerald-300 text-xs font-medium hover:bg-emerald-900/80 disabled:opacity-50 transition-colors"
                 >
@@ -298,7 +336,9 @@ export default function PaymentsPage() {
                 </button>
                 <button
                   type="button"
-                  disabled={actionLoading || selectedPayment.status === "failed"}
+                  disabled={
+                    actionLoading || selectedPayment.status === "failed"
+                  }
                   onClick={() => handleStatusUpdate("failed")}
                   className="px-3 py-1.5 rounded-lg bg-rose-950/60 border border-rose-800/50 text-rose-300 text-xs font-medium hover:bg-rose-900/80 disabled:opacity-50 transition-colors"
                 >
