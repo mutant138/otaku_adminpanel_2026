@@ -63,9 +63,11 @@ export default function LoginPage() {
       <div className="w-full max-w-md relative z-10 animate-fade-in">
         {/* Logo and Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex p-3 rounded-2xl bg-linear-to-tr from-rose-600 to-purple-600 shadow-xl shadow-rose-950/40 mb-3.5">
-            <Shield className="w-8 h-8 text-white" />
-          </div>
+          <img
+            src="/otakuLogo.jpg"
+            alt="OtakuDuo"
+            className="w-16 h-16 rounded-2xl object-cover border border-slate-700/80 shadow-2xl shadow-rose-950/60 mb-3.5 mx-auto"
+          />
           <h1 className="text-2xl font-bold text-slate-100 tracking-tight">
             OtakuDuo Admin
           </h1>

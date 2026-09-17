@@ -14,6 +14,7 @@ import {
   LogOut,
   Shield,
   X,
+  BookOpen,
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -53,6 +54,11 @@ export default function Sidebar({ onClose }) {
       path: "/emails",
       icon: <Mail className="w-4 h-4" />,
     },
+    {
+      label: "Blogs & SEO",
+      path: "/blogs",
+      icon: <BookOpen className="w-4 h-4" />,
+    },
   ];
 
   return (
@@ -60,9 +66,11 @@ export default function Sidebar({ onClose }) {
       {/* Brand Header */}
       <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800/80 bg-[#121522]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-linear-to-tr from-rose-600 to-purple-600 flex items-center justify-center shadow-lg shadow-rose-900/30">
-            <Shield className="w-4 h-4 text-white" />
-          </div>
+          <img
+            src="/otakuLogo.jpg"
+            alt="OtakuDuo"
+            className="w-8 h-8 rounded-xl object-cover border border-slate-700/60 shadow-md shadow-rose-950/40 shrink-0"
+          />
           <div>
             <div className="font-bold text-sm text-slate-100 tracking-wide flex items-center gap-1.5">
               <span>OtakuDuo</span>
