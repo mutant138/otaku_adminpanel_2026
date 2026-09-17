@@ -4,6 +4,7 @@ import { toast } from "../store/useToastStore.js";
 import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import Pagination from "../components/common/Pagination.jsx";
+import ViewToggle from "../components/common/ViewToggle.jsx";
 import {
   LoadingSpinner,
   EmptyState,
@@ -21,6 +22,7 @@ export default function PaymentsPage() {
   const [payments, setPayments] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("table");
 
   // Filters
   const [statusFilter, setStatusFilter] = useState("");
@@ -143,22 +145,26 @@ export default function PaymentsPage() {
           />
         </form>
 
-        <select
-          value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="w-full sm:w-auto px-3 py-2 bg-[#161a29] border border-slate-700/60 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-rose-500"
-        >
-          <option value="">All Statuses</option>
-          <option value="verified">Verified Only</option>
-          <option value="created">Created (Pending)</option>
-          <option value="failed">Failed</option>
-        </select>
+        <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full sm:w-auto px-3 py-2 bg-[#161a29] border border-slate-700/60 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-rose-500"
+          >
+            <option value="">All Statuses</option>
+            <option value="verified">Verified Only</option>
+            <option value="created">Created (Pending)</option>
+            <option value="failed">Failed</option>
+          </select>
+
+          <ViewToggle view={viewMode} onViewChange={setViewMode} />
+        </div>
       </div>
 
-      {/* Payments Table */}
+      {/* Payments Content */}
       <div className="rounded-2xl bg-[#121522] border border-slate-800/80 overflow-hidden">
         {loading ? (
           <LoadingSpinner text="Fetching transactions list..." />
@@ -168,6 +174,79 @@ export default function PaymentsPage() {
             title="No payment records found"
             description="No transactions match the selected filter."
           />
+        ) : viewMode === "card" ? (
+          <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {payments.map((p) => (
+              <div
+                key={p._id}
+                className="p-4 rounded-xl bg-[#161a29] border border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between group"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center font-bold text-slate-300 text-sm shrink-0 overflow-hidden border border-slate-700/60">
+                        {p.user?.avatar ? (
+                          <img
+                            src={p.user.avatar}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          p.user?.fullname?.[0] || p.user?.email?.[0] || "U"
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-200 text-sm truncate">
+                          {p.user?.fullname || p.user?.username || "Anonymous"}
+                        </div>
+                        <div className="text-[11px] text-slate-500 truncate">
+                          {p.user?.email || "No email"}
+                        </div>
+                      </div>
+                    </div>
+                    {getStatusBadge(p.status)}
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-[#121522]/80 border border-slate-800/60 space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500 text-[11px]">Plan</span>
+                      <Badge variant="purple" size="xs">
+                        {p.planId}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500 text-[11px]">Amount</span>
+                      <span className="font-bold text-emerald-400 text-sm">
+                        ₹{Math.round(p.amount / 100)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500 text-[11px]">Payment ID</span>
+                      <span className="font-mono text-[11px] text-slate-400 truncate max-w-28">
+                        {p.razorpay_payment_id || "—"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500 text-[11px]">Date</span>
+                      <span className="text-slate-400 text-[11px]">
+                        {new Date(p.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-end">
+                  <button
+                    onClick={() => openDetailModal(p)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-[#121522] text-slate-300 hover:text-white hover:border-slate-600 transition-colors text-xs font-medium"
+                  >
+                    <Eye className="w-3.5 h-3.5 text-slate-400" />
+                    <span>View Details</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="table-container">
             <table className="w-full text-left border-collapse">

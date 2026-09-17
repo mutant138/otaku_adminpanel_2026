@@ -4,17 +4,19 @@ import { toast } from "../store/useToastStore.js";
 import Tabs from "../components/common/Tabs.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
+import ViewToggle from "../components/common/ViewToggle.jsx";
 import {
   LoadingSpinner,
   EmptyState,
 } from "../components/common/LoadingSpinner.jsx";
-import { Tags, Plus, Edit2, Trash2, Film, Gamepad2 } from "lucide-react";
+import { Tags, Plus, Edit2, Trash2, Film, Gamepad2, Calendar } from "lucide-react";
 
 export default function CategoriesPage() {
   const [activeTab, setActiveTab] = useState("anime"); // 'anime' | 'game'
   const [animeCategories, setAnimeCategories] = useState([]);
   const [gameCategories, setGameCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("table");
 
   // Modal States
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -171,7 +173,7 @@ export default function CategoriesPage() {
 
         <button
           onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>
@@ -180,8 +182,8 @@ export default function CategoriesPage() {
         </button>
       </div>
 
-      {/* Tabs Switcher */}
-      <div className="flex items-center justify-between">
+      {/* Tabs & View Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <Tabs
           tabs={[
             {
@@ -200,9 +202,11 @@ export default function CategoriesPage() {
           activeTab={activeTab}
           onChange={(key) => setActiveTab(key)}
         />
+
+        <ViewToggle view={viewMode} onViewChange={setViewMode} />
       </div>
 
-      {/* Categories Grid */}
+      {/* Categories Content: Table or Grid */}
       {loading ? (
         <LoadingSpinner text="Loading categories..." />
       ) : currentList.length === 0 ? (
@@ -211,7 +215,76 @@ export default function CategoriesPage() {
           title={`No ${activeTab === "anime" ? "Anime Genres" : "Game Categories"} yet`}
           description="Create your first genre to organize titles."
         />
+      ) : viewMode === "table" ? (
+        <div className="rounded-2xl bg-[#121522] border border-slate-800/80 overflow-hidden">
+          <div className="table-container">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 bg-[#161a29]/80 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  <th className="py-3.5 px-4">Icon &amp; Name</th>
+                  <th className="py-3.5 px-3">Slug</th>
+                  <th className="py-3.5 px-3">Description</th>
+                  <th className="py-3.5 px-3">Created</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 text-xs">
+                {currentList.map((cat) => (
+                  <tr
+                    key={cat._id}
+                    className="hover:bg-slate-800/30 transition-colors"
+                  >
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl p-1.5 rounded-lg bg-[#181d2e] border border-slate-800 shrink-0">
+                          {cat.icon || "🏷️"}
+                        </span>
+                        <div className="font-semibold text-slate-100">
+                          {cat.name}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-3">
+                      <span className="text-[11px] text-purple-400 font-mono">
+                        #{cat.slug}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-3 max-w-xs">
+                      <p className="text-slate-400 text-xs line-clamp-1 truncate">
+                        {cat.description || "—"}
+                      </p>
+                    </td>
+                    <td className="py-3.5 px-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">
+                      {cat.createdAt
+                        ? new Date(cat.createdAt).toLocaleDateString()
+                        : "—"}
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => openEditModal(cat)}
+                          className="p-1.5 rounded-lg border border-slate-700 bg-[#161a29] text-slate-300 hover:text-white hover:border-slate-600 transition-colors cursor-pointer"
+                          title="Edit Category"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => openDeleteModal(cat)}
+                          className="p-1.5 rounded-lg border border-rose-900/50 bg-rose-950/30 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors cursor-pointer"
+                          title="Delete Category"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       ) : (
+        /* Card View */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {currentList.map((cat) => (
             <div
@@ -237,14 +310,14 @@ export default function CategoriesPage() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => openEditModal(cat)}
-                      className="p-1.5 rounded-lg border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800"
+                      className="p-1.5 rounded-lg border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
                       title="Edit Category"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => openDeleteModal(cat)}
-                      className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600"
+                      className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 cursor-pointer"
                       title="Delete Category"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -258,7 +331,8 @@ export default function CategoriesPage() {
               </div>
 
               <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
-                <span>
+                <span className="flex items-center gap-1 font-mono">
+                  <Calendar className="w-3 h-3 text-slate-500" />
                   Created {new Date(cat.createdAt).toLocaleDateString()}
                 </span>
               </div>

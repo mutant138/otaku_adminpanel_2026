@@ -4,6 +4,7 @@ import { toast } from "../store/useToastStore.js";
 import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
+import ViewToggle from "../components/common/ViewToggle.jsx";
 import {
   LoadingSpinner,
   EmptyState,
@@ -13,6 +14,7 @@ import { Sparkles, Plus, Edit2, Trash2, Check, Crown } from "lucide-react";
 export default function PlansPage() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("table");
 
   // Modals
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -170,24 +172,154 @@ export default function PlansPage() {
           </p>
         </div>
 
-        <button
-          onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Create New Plan</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <ViewToggle view={viewMode} onViewChange={setViewMode} />
+          <button
+            onClick={openCreateModal}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Create New Plan</span>
+          </button>
+        </div>
       </div>
 
       {/* Plans List */}
       {loading ? (
-        <LoadingSpinner text="Fetching monetization plans..." />
+        <div className="rounded-2xl bg-[#121522] border border-slate-800/80 p-8">
+          <LoadingSpinner text="Fetching monetization plans..." />
+        </div>
       ) : plans.length === 0 ? (
-        <EmptyState
-          icon={<Sparkles className="w-8 h-8" />}
-          title="No plans configured"
-          description="Create your first subscription or refill pack."
-        />
+        <div className="rounded-2xl bg-[#121522] border border-slate-800/80 p-8">
+          <EmptyState
+            icon={<Sparkles className="w-8 h-8" />}
+            title="No plans configured"
+            description="Create your first subscription or refill pack."
+          />
+        </div>
+      ) : viewMode === "table" ? (
+        <div className="rounded-2xl bg-[#121522] border border-slate-800/80 overflow-hidden">
+          <div className="table-container">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 bg-[#161a29]/80 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  <th className="py-3.5 px-4">Plan Name & ID</th>
+                  <th className="py-3.5 px-3">Type</th>
+                  <th className="py-3.5 px-3">Price</th>
+                  <th className="py-3.5 px-3">Perks / Refill</th>
+                  <th className="py-3.5 px-3">Status</th>
+                  <th className="py-3.5 px-3">Last Updated</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 text-xs">
+                {plans.map((p) => {
+                  const discountPercent =
+                    p.originalPrice > p.price
+                      ? Math.round(
+                          ((p.originalPrice - p.price) / p.originalPrice) * 100,
+                        )
+                      : 0;
+
+                  return (
+                    <tr
+                      key={p._id}
+                      className="hover:bg-slate-800/30 transition-colors"
+                    >
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-slate-100">
+                            {p.name}
+                          </span>
+                          {p.isPremium && (
+                            <Badge variant="purple" size="xs">
+                              <Crown className="w-2.5 h-2.5" />
+                              <span>PRO</span>
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="text-[11px] text-slate-500 font-mono">
+                          {p.planId}
+                        </div>
+                      </td>
+
+                      <td className="py-3.5 px-3">
+                        <Badge
+                          variant={p.type === "subscription" ? "purple" : "info"}
+                          size="xs"
+                        >
+                          {p.type === "subscription"
+                            ? `Subscription (${p.durationDays}d)`
+                            : "Refill Pack"}
+                        </Badge>
+                      </td>
+
+                      <td className="py-3.5 px-3">
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="font-bold text-white text-sm">
+                            ₹{p.price}
+                          </span>
+                          {p.originalPrice > p.price && (
+                            <span className="text-[11px] line-through text-slate-500">
+                              ₹{p.originalPrice}
+                            </span>
+                          )}
+                          {discountPercent > 0 && (
+                            <span className="text-[10px] font-bold text-emerald-400">
+                              {discountPercent}% off
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      <td className="py-3.5 px-3 text-slate-300">
+                        {p.complimentsRefill > 0 && (
+                          <Badge variant="warning" size="xs">
+                            +{p.complimentsRefill} Compliments
+                          </Badge>
+                        )}
+                        {p.benefits && p.benefits.length > 0 && (
+                          <span className="text-[11px] text-slate-400 block mt-1">
+                            {p.benefits.length} perk{p.benefits.length > 1 ? "s" : ""} included
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="py-3.5 px-3">
+                        <Badge variant="success" size="xs">
+                          Active
+                        </Badge>
+                      </td>
+
+                      <td className="py-3.5 px-3 text-slate-400 text-[11px] whitespace-nowrap">
+                        {new Date(p.updatedAt || p.createdAt).toLocaleDateString()}
+                      </td>
+
+                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => openEditModal(p)}
+                            className="p-1.5 rounded-lg border border-slate-700 bg-[#161a29] text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
+                            title="Edit Plan"
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => openDeleteModal(p)}
+                            className="p-1.5 rounded-lg border border-rose-900/50 bg-[#161a29] text-rose-400 hover:text-white hover:bg-rose-600 transition-colors"
+                            title="Delete Plan"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {plans.map((p) => {

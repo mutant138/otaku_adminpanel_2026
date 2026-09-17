@@ -5,6 +5,7 @@ import Tabs from "../components/common/Tabs.jsx";
 import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
+import ViewToggle from "../components/common/ViewToggle.jsx";
 import {
   LoadingSpinner,
   EmptyState,
@@ -18,6 +19,7 @@ import {
   Search,
   Star,
   Image as ImageIcon,
+  Calendar,
 } from "lucide-react";
 
 export default function TitlesPage() {
@@ -27,6 +29,7 @@ export default function TitlesPage() {
   const [animeCategories, setAnimeCategories] = useState([]);
   const [gameCategories, setGameCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("table");
 
   // Search & Filter
   const [search, setSearch] = useState("");
@@ -183,22 +186,25 @@ export default function TitlesPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Bar */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <Film className="w-6 h-6 text-rose-500" />
-            <span>Title Catalog Management</span>
+            {activeTab === "anime" ? (
+              <Film className="w-6 h-6 text-rose-500" />
+            ) : (
+              <Gamepad2 className="w-6 h-6 text-purple-500" />
+            )}
+            <span>Catalog Titles Management</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Maintain official anime series and video game titles for user
-            favorite selections
+            Browse, search, edit, and organize anime &amp; gaming titles for user profiles
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>
@@ -245,21 +251,25 @@ export default function TitlesPage() {
           />
         </div>
 
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="w-full sm:w-auto px-3 py-2 bg-[#161a29] border border-slate-700/60 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-rose-500"
-        >
-          <option value="">All Categories / Genres</option>
-          {currentCategories.map((c) => (
-            <option key={c._id} value={c._id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+        <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="w-full sm:w-auto px-3 py-2 bg-[#161a29] border border-slate-700/60 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-rose-500"
+          >
+            <option value="">All Categories / Genres</option>
+            {currentCategories.map((c) => (
+              <option key={c._id} value={c._id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+
+          <ViewToggle view={viewMode} onViewChange={setViewMode} />
+        </div>
       </div>
 
-      {/* Titles Grid */}
+      {/* Titles Content: Table or Grid */}
       {loading ? (
         <LoadingSpinner text="Fetching titles catalog..." />
       ) : filteredTitles.length === 0 ? (
@@ -268,7 +278,98 @@ export default function TitlesPage() {
           title="No titles match your filter"
           description="Try clearing search or add a new title."
         />
+      ) : viewMode === "table" ? (
+        <div className="rounded-2xl bg-[#121522] border border-slate-800/80 overflow-hidden">
+          <div className="table-container">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 bg-[#161a29]/80 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  <th className="py-3.5 px-4">Cover &amp; Title</th>
+                  <th className="py-3.5 px-3">Genres / Categories</th>
+                  <th className="py-3.5 px-3">Popularity</th>
+                  <th className="py-3.5 px-3">Created</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 text-xs">
+                {filteredTitles.map((item) => (
+                  <tr
+                    key={item._id}
+                    className="hover:bg-slate-800/30 transition-colors"
+                  >
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-12 rounded-lg bg-[#181c2c] overflow-hidden shrink-0 flex items-center justify-center border border-slate-700/50 shadow-inner">
+                          {item.image ? (
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.style.display = "none";
+                              }}
+                            />
+                          ) : (
+                            <ImageIcon className="w-4 h-4 text-slate-600" />
+                          )}
+                        </div>
+                        <div className="font-semibold text-slate-100 text-sm">
+                          {item.title}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-3">
+                      <div className="flex flex-wrap gap-1 max-w-xs">
+                        {item.categories && item.categories.length > 0 ? (
+                          item.categories.map((c) => (
+                            <Badge key={c._id || c} variant="purple" size="xs">
+                              {c.name || "Genre"}
+                            </Badge>
+                          ))
+                        ) : (
+                          <span className="text-[11px] text-slate-500">
+                            Uncategorized
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-3">
+                      <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#181c2d] border border-amber-500/20 text-amber-300 font-mono text-[11px] font-bold">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span>{item.popularity ?? 0}</span>
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">
+                      {item.createdAt
+                        ? new Date(item.createdAt).toLocaleDateString()
+                        : "—"}
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => openEditModal(item)}
+                          className="p-1.5 rounded-lg border border-slate-700 bg-[#161a29] text-slate-300 hover:text-white hover:border-slate-600 transition-colors cursor-pointer"
+                          title="Edit Title"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => openDeleteModal(item)}
+                          className="p-1.5 rounded-lg border border-rose-900/50 bg-rose-950/30 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors cursor-pointer"
+                          title="Delete Title"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       ) : (
+        /* Card View */
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredTitles.map((item) => (
             <div
@@ -325,14 +426,14 @@ export default function TitlesPage() {
                 <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-end gap-1.5">
                   <button
                     onClick={() => openEditModal(item)}
-                    className="p-1.5 rounded-lg border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800"
+                    className="p-1.5 rounded-lg border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
                     title="Edit Title"
                   >
                     <Edit2 className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => openDeleteModal(item)}
-                    className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600"
+                    className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 cursor-pointer"
                     title="Delete Title"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

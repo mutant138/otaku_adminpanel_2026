@@ -3,6 +3,7 @@ import api from "../services/api.js";
 import { toast } from "../store/useToastStore.js";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
+import ViewToggle from "../components/common/ViewToggle.jsx";
 import {
   LoadingSpinner,
   EmptyState,
@@ -12,6 +13,7 @@ import { Mail, Plus, Edit2, Trash2, Send, Eye, Code } from "lucide-react";
 export default function EmailTemplatesPage() {
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("table");
 
   // Modals
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -173,24 +175,102 @@ export default function EmailTemplatesPage() {
           </p>
         </div>
 
-        <button
-          onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>New Email Template</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <ViewToggle view={viewMode} onViewChange={setViewMode} />
+          <button
+            onClick={openCreateModal}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Email Template</span>
+          </button>
+        </div>
       </div>
 
       {/* Templates List */}
       {loading ? (
-        <LoadingSpinner text="Fetching email templates..." />
+        <div className="rounded-2xl bg-[#121522] border border-slate-800/80 p-8">
+          <LoadingSpinner text="Fetching email templates..." />
+        </div>
       ) : templates.length === 0 ? (
-        <EmptyState
-          icon={<Mail className="w-8 h-8" />}
-          title="No email templates found"
-          description="Create your first transactional template."
-        />
+        <div className="rounded-2xl bg-[#121522] border border-slate-800/80 p-8">
+          <EmptyState
+            icon={<Mail className="w-8 h-8" />}
+            title="No email templates found"
+            description="Create your first transactional template."
+          />
+        </div>
+      ) : viewMode === "table" ? (
+        <div className="rounded-2xl bg-[#121522] border border-slate-800/80 overflow-hidden">
+          <div className="table-container">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 bg-[#161a29]/80 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  <th className="py-3.5 px-4">Identifier / Slug</th>
+                  <th className="py-3.5 px-4">Subject</th>
+                  <th className="py-3.5 px-4">Variables</th>
+                  <th className="py-3.5 px-4">Last Updated</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 text-xs">
+                {templates.map((tpl) => (
+                  <tr
+                    key={tpl._id}
+                    className="hover:bg-slate-800/30 transition-colors"
+                  >
+                    <td className="py-3.5 px-4 font-mono text-purple-400 font-semibold">
+                      #{tpl.identifier}
+                    </td>
+
+                    <td className="py-3.5 px-4 font-medium text-slate-200">
+                      {tpl.subject}
+                    </td>
+
+                    <td className="py-3.5 px-4 text-slate-400 font-mono text-[11px]">
+                      {"{{fullname}}, {{otp}}"}
+                    </td>
+
+                    <td className="py-3.5 px-4 text-slate-400 text-[11px] whitespace-nowrap">
+                      {new Date(
+                        tpl.updatedAt || tpl.createdAt,
+                      ).toLocaleDateString()}
+                    </td>
+
+                    <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => openTestEmailModal(tpl)}
+                          className="p-1.5 rounded-lg border border-slate-700 bg-[#161a29] text-sky-400 hover:text-white hover:bg-sky-950/50 transition-colors"
+                          title="Send Test Email"
+                        >
+                          <Send className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => openEditModal(tpl)}
+                          className="p-1.5 rounded-lg border border-slate-700 bg-[#161a29] text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
+                          title="Edit Template"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSelectedTemplate(tpl);
+                            setDeleteModalOpen(true);
+                          }}
+                          className="p-1.5 rounded-lg border border-rose-900/50 bg-[#161a29] text-rose-400 hover:text-white hover:bg-rose-600 transition-colors"
+                          title="Delete Template"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {templates.map((tpl) => (

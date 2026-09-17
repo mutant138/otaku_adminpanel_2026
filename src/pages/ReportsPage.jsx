@@ -5,6 +5,7 @@ import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
 import Pagination from "../components/common/Pagination.jsx";
+import ViewToggle from "../components/common/ViewToggle.jsx";
 import {
   LoadingSpinner,
   EmptyState,
@@ -23,6 +24,7 @@ export default function ReportsPage() {
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [viewMode, setViewMode] = useState("table");
 
   // Modals state
   const [viewModalOpen, setViewModalOpen] = useState(false);
@@ -104,18 +106,22 @@ export default function ReportsPage() {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-          <Flag className="w-6 h-6 text-amber-500" />
-          <span>Moderation & Reports</span>
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Review community flagged behavior, investigate incident reports, and
-          take disciplinary action
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
+            <Flag className="w-6 h-6 text-amber-500" />
+            <span>Moderation & Reports</span>
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            Review community flagged behavior, investigate incident reports, and
+            take disciplinary action
+          </p>
+        </div>
+
+        <ViewToggle view={viewMode} onViewChange={setViewMode} />
       </div>
 
-      {/* Reports Table Card */}
+      {/* Reports Content */}
       <div className="rounded-2xl bg-[#121522] border border-slate-800/80 overflow-hidden">
         {loading ? (
           <LoadingSpinner text="Fetching community reports..." />
@@ -125,6 +131,115 @@ export default function ReportsPage() {
             title="Clean moderation queue!"
             description="There are currently no outstanding user reports pending review."
           />
+        ) : viewMode === "card" ? (
+          <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {reports.map((r) => (
+              <div
+                key={r._id}
+                className="p-4 rounded-xl bg-[#161a29] border border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between group"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <Badge variant="danger" size="xs">
+                      <AlertTriangle className="w-3 h-3" />
+                      <span>{r.reason}</span>
+                    </Badge>
+                    <span className="text-[10px] text-slate-500">
+                      {new Date(r.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                  {/* Accused User */}
+                  <div className="p-2.5 rounded-lg bg-rose-950/20 border border-rose-900/40 space-y-1.5">
+                    <span className="text-[10px] font-bold text-rose-400 uppercase tracking-wider block">
+                      Accused User
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-rose-950/80 border border-rose-800/40 flex items-center justify-center font-bold text-rose-300 text-xs shrink-0 overflow-hidden">
+                        {r.reportedUser?.avatar ? (
+                          <img
+                            src={r.reportedUser.avatar}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          "T"
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-200 text-xs truncate">
+                          {r.reportedUser?.fullname ||
+                            r.reportedUser?.username ||
+                            "Account Deleted"}
+                        </div>
+                        <div className="text-[10px] text-slate-400 truncate">
+                          {r.reportedUser?.email || "No email"}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Reporter */}
+                  <div className="p-2.5 rounded-lg bg-[#121522]/80 border border-slate-800/60 space-y-1.5">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                      Reporter
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-md bg-slate-800 border border-slate-700/60 flex items-center justify-center font-bold text-slate-300 text-[10px] shrink-0 overflow-hidden">
+                        {r.reporter?.avatar ? (
+                          <img
+                            src={r.reporter.avatar}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          "R"
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-medium text-slate-300 text-xs truncate">
+                          {r.reporter?.fullname ||
+                            r.reporter?.username ||
+                            "Unknown"}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Description Snippet */}
+                  <p className="text-xs text-slate-400 line-clamp-2 italic bg-[#121522]/40 p-2 rounded-lg border border-slate-800/40">
+                    "{r.details || "No additional description provided."}"
+                  </p>
+                </div>
+
+                <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between gap-1.5">
+                  <button
+                    onClick={() => openViewModal(r)}
+                    className="flex-1 flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg border border-slate-700 text-sky-400 hover:text-white hover:bg-sky-950/60 transition-colors text-xs font-medium"
+                    title="View Elaborately"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>View</span>
+                  </button>
+                  <button
+                    onClick={() => openBanModal(r)}
+                    disabled={!r.reportedUser}
+                    className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    title="Ban Reported User"
+                  >
+                    <Ban className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => openDismissModal(r)}
+                    className="p-1.5 rounded-lg border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                    title="Dismiss Report"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="table-container">
             <table className="w-full text-left border-collapse">

@@ -5,6 +5,7 @@ import Badge from "../components/common/Badge.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
 import Pagination from "../components/common/Pagination.jsx";
+import ViewToggle from "../components/common/ViewToggle.jsx";
 import {
   LoadingSpinner,
   EmptyState,
@@ -19,12 +20,15 @@ import {
   Bot,
   CheckCircle2,
   Shield,
+  Calendar,
+  Sparkles,
 } from "lucide-react";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("table");
 
   // Filters & Search
   const [search, setSearch] = useState("");
@@ -277,10 +281,12 @@ export default function UsersPage() {
             <option value="true">Bots Only</option>
             <option value="false">Humans Only</option>
           </select>
+
+          <ViewToggle view={viewMode} onViewChange={setViewMode} />
         </div>
       </div>
 
-      {/* Users Table */}
+      {/* Users Content: Table or Cards */}
       <div className="rounded-2xl bg-[#121522] border border-slate-800/80 overflow-hidden">
         {loading ? (
           <LoadingSpinner text="Fetching user records..." />
@@ -290,7 +296,7 @@ export default function UsersPage() {
             title="No users found"
             description="Try changing your search keywords or filter settings."
           />
-        ) : (
+        ) : viewMode === "table" ? (
           <div className="table-container">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -415,14 +421,14 @@ export default function UsersPage() {
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => openEditModal(u)}
-                          className="p-1.5 rounded-lg border border-slate-700 bg-[#161a29] text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
+                          className="p-1.5 rounded-lg border border-slate-700 bg-[#161a29] text-slate-300 hover:text-white hover:border-slate-600 transition-colors cursor-pointer"
                           title="Edit User"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => openDeleteModal(u)}
-                          className="p-1.5 rounded-lg border border-rose-900/50 bg-rose-950/30 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors"
+                          className="p-1.5 rounded-lg border border-rose-900/50 bg-rose-950/30 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors cursor-pointer"
                           title="Delete User"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -433,6 +439,134 @@ export default function UsersPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        ) : (
+          /* Card View */
+          <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {users.map((u) => (
+              <div
+                key={u.id || u._id}
+                className="bg-[#161a29]/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-all shadow-sm hover:shadow-md"
+              >
+                <div>
+                  {/* Top row: Avatar + Identity + Actions */}
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-xl bg-slate-800 flex items-center justify-center font-bold text-slate-300 text-sm shrink-0 overflow-hidden border border-slate-700/60 shadow-inner">
+                        {u.avatar ? (
+                          <img
+                            src={u.avatar}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          u.fullname?.[0] || u.username?.[0] || "U"
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-100 text-sm truncate">
+                          {u.fullname || u.username || "Anonymous"}
+                        </div>
+                        <div className="text-[11px] text-slate-400 truncate">
+                          {u.email}
+                        </div>
+                        <div className="text-[10px] text-slate-500 font-mono">
+                          ID: {u.userId || u.id?.substring(0, 8)}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        onClick={() => openEditModal(u)}
+                        className="p-1.5 rounded-lg border border-slate-700 bg-[#121522] text-slate-300 hover:text-white hover:border-slate-600 transition-colors cursor-pointer"
+                        title="Edit User"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => openDeleteModal(u)}
+                        className="p-1.5 rounded-lg border border-rose-900/50 bg-rose-950/30 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors cursor-pointer"
+                        title="Delete User"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Badges */}
+                  <div className="flex items-center gap-1.5 flex-wrap my-2.5">
+                    {u.role === "admin" ? (
+                      <Badge variant="primary" size="xs">
+                        <Shield className="w-2.5 h-2.5" />
+                        <span>Admin</span>
+                      </Badge>
+                    ) : (
+                      <Badge variant="default" size="xs">
+                        User
+                      </Badge>
+                    )}
+                    {u.isVerified ? (
+                      <Badge variant="success" size="xs" title="Verified">
+                        <CheckCircle2 className="w-2.5 h-2.5" />
+                        <span>Verified</span>
+                      </Badge>
+                    ) : (
+                      <Badge variant="warning" size="xs">
+                        Unverified
+                      </Badge>
+                    )}
+                    {u.isPremium && (
+                      <Badge variant="purple" size="xs">
+                        <Crown className="w-2.5 h-2.5" />
+                        <span>PRO</span>
+                      </Badge>
+                    )}
+                    {u.isBot && (
+                      <Badge variant="info" size="xs">
+                        <Bot className="w-2.5 h-2.5" />
+                        <span>Bot</span>
+                      </Badge>
+                    )}
+                  </div>
+
+                  {/* Balances Box */}
+                  <div className="bg-[#121522] rounded-lg p-2.5 border border-slate-800/60 my-2 text-[11px] grid grid-cols-3 gap-1 text-center">
+                    <div className="bg-[#181c2d] p-1.5 rounded">
+                      <div className="text-[9.5px] text-slate-400">Compliments</div>
+                      <div className="font-bold text-rose-400 font-mono mt-0.5">
+                        {u.complimentsBalance ?? 0}
+                      </div>
+                    </div>
+                    <div className="bg-[#181c2d] p-1.5 rounded">
+                      <div className="text-[9.5px] text-slate-400">Super Likes</div>
+                      <div className="font-bold text-amber-400 font-mono mt-0.5">
+                        {u.superLikesBalance ?? 0}
+                      </div>
+                    </div>
+                    <div className="bg-[#181c2d] p-1.5 rounded">
+                      <div className="text-[9.5px] text-slate-400">Swipes</div>
+                      <div className="font-bold text-sky-400 font-mono mt-0.5">
+                        {u.extraSwipesBalance ?? 0}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer: Joined date */}
+                <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-3 h-3 text-slate-500" />
+                    Joined
+                  </span>
+                  <span>
+                    {u.createdAt
+                      ? new Date(u.createdAt).toLocaleDateString()
+                      : "—"}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 

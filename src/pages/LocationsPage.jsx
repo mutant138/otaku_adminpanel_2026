@@ -4,6 +4,7 @@ import { toast } from "../store/useToastStore.js";
 import Tabs from "../components/common/Tabs.jsx";
 import Modal from "../components/common/Modal.jsx";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
+import ViewToggle from "../components/common/ViewToggle.jsx";
 import {
   LoadingSpinner,
   EmptyState,
@@ -16,6 +17,7 @@ export default function LocationsPage() {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("table");
 
   // Modals state
   const [addCountryOpen, setAddCountryOpen] = useState(false);
@@ -146,7 +148,9 @@ export default function LocationsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-3 flex-wrap">
+          <ViewToggle view={viewMode} onViewChange={setViewMode} />
+
           {activeTab === "countries" && (
             <button
               onClick={() => setAddCountryOpen(true)}
@@ -216,121 +220,255 @@ export default function LocationsPage() {
         <LoadingSpinner text="Fetching location database..." />
       ) : (
         <div className="rounded-2xl bg-[#121522] border border-slate-800/80 overflow-hidden">
+          {/* COUNTRIES TAB */}
           {activeTab === "countries" && (
-            <div className="divide-y divide-slate-800/60">
-              {countries.length === 0 ? (
-                <EmptyState
-                  title="No countries added"
-                  description="Add supported countries first."
-                />
-              ) : (
-                countries.map((c) => (
+            countries.length === 0 ? (
+              <EmptyState
+                title="No countries added"
+                description="Add supported countries first."
+              />
+            ) : viewMode === "card" ? (
+              <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {countries.map((c) => (
                   <div
                     key={c._id}
-                    className="p-4 sm:px-6 flex items-center justify-between hover:bg-slate-800/20 transition-colors"
+                    className="p-4 rounded-xl bg-[#161a29] border border-slate-800/80 hover:border-slate-700 transition-all flex items-center justify-between group"
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl p-1.5 rounded-lg bg-[#181d2e] border border-slate-800">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="text-3xl p-2 rounded-xl bg-[#121522] border border-slate-800 shrink-0">
                         {c.flag || "🌐"}
                       </span>
-                      <div>
-                        <span className="text-sm font-semibold text-slate-100">
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-100 text-sm truncate">
                           {c.name}
-                        </span>
-                        <span className="text-xs text-slate-500 font-mono ml-2">
-                          [{c.code}]
+                        </div>
+                        <span className="text-xs text-slate-400 font-mono">
+                          Code: {c.code}
                         </span>
                       </div>
                     </div>
+
                     <button
                       onClick={() => openDeleteDialog(c, "countries")}
-                      className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors"
+                      className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors shrink-0 ml-2"
                       title="Delete Country"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="table-container">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-800 bg-[#161a29]/80 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                      <th className="py-3.5 px-4">Flag</th>
+                      <th className="py-3.5 px-4">Country Name</th>
+                      <th className="py-3.5 px-4">ISO Code</th>
+                      <th className="py-3.5 px-4 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60 text-xs">
+                    {countries.map((c) => (
+                      <tr
+                        key={c._id}
+                        className="hover:bg-slate-800/20 transition-colors"
+                      >
+                        <td className="py-3.5 px-4 w-14">
+                          <span className="text-xl p-1.5 rounded-lg bg-[#181d2e] border border-slate-800 inline-block">
+                            {c.flag || "🌐"}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 font-semibold text-slate-100">
+                          {c.name}
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-slate-400">
+                          {c.code}
+                        </td>
+                        <td className="py-3.5 px-4 text-right">
+                          <button
+                            onClick={() => openDeleteDialog(c, "countries")}
+                            className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors"
+                            title="Delete Country"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
           )}
 
+          {/* STATES TAB */}
           {activeTab === "states" && (
-            <div className="divide-y divide-slate-800/60">
-              {states.length === 0 ? (
-                <EmptyState
-                  title="No states added"
-                  description="Add states linked to your countries."
-                />
-              ) : (
-                states.map((s) => {
+            states.length === 0 ? (
+              <EmptyState
+                title="No states added"
+                description="Add states linked to your countries."
+              />
+            ) : viewMode === "card" ? (
+              <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {states.map((s) => {
                   const countryObj = countries.find((c) => c._id === s.country);
                   return (
                     <div
                       key={s._id}
-                      className="p-4 sm:px-6 flex items-center justify-between hover:bg-slate-800/20 transition-colors"
+                      className="p-4 rounded-xl bg-[#161a29] border border-slate-800/80 hover:border-slate-700 transition-all flex items-center justify-between group"
                     >
-                      <div>
-                        <span className="text-sm font-semibold text-slate-100">
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-100 text-sm truncate">
                           {s.name}
-                        </span>
+                        </div>
                         {countryObj && (
-                          <span className="text-xs text-slate-400 ml-2">
-                            ({countryObj.flag} {countryObj.name})
-                          </span>
+                          <div className="text-xs text-slate-400 mt-0.5 flex items-center gap-1.5">
+                            <span>{countryObj.flag}</span>
+                            <span className="truncate">{countryObj.name}</span>
+                          </div>
                         )}
                       </div>
+
                       <button
                         onClick={() => openDeleteDialog(s, "states")}
-                        className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors"
+                        className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors shrink-0 ml-2"
                         title="Delete State"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   );
-                })
-              )}
-            </div>
+                })}
+              </div>
+            ) : (
+              <div className="table-container">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-800 bg-[#161a29]/80 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                      <th className="py-3.5 px-4">State / Region Name</th>
+                      <th className="py-3.5 px-4">Country</th>
+                      <th className="py-3.5 px-4 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60 text-xs">
+                    {states.map((s) => {
+                      const countryObj = countries.find((c) => c._id === s.country);
+                      return (
+                        <tr
+                          key={s._id}
+                          className="hover:bg-slate-800/20 transition-colors"
+                        >
+                          <td className="py-3.5 px-4 font-semibold text-slate-100">
+                            {s.name}
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-300">
+                            {countryObj ? (
+                              <span className="flex items-center gap-1.5">
+                                <span>{countryObj.flag}</span>
+                                <span>{countryObj.name}</span>
+                              </span>
+                            ) : (
+                              <span className="text-slate-500">—</span>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-4 text-right">
+                            <button
+                              onClick={() => openDeleteDialog(s, "states")}
+                              className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors"
+                              title="Delete State"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )
           )}
 
+          {/* CITIES TAB */}
           {activeTab === "cities" && (
-            <div className="divide-y divide-slate-800/60">
-              {cities.length === 0 ? (
-                <EmptyState
-                  title="No cities added"
-                  description="Add cities linked to states."
-                />
-              ) : (
-                cities.map((city) => {
+            cities.length === 0 ? (
+              <EmptyState
+                title="No cities added"
+                description="Add cities linked to states."
+              />
+            ) : viewMode === "card" ? (
+              <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {cities.map((city) => {
                   const stateObj = states.find((s) => s._id === city.state);
                   return (
                     <div
                       key={city._id}
-                      className="p-4 sm:px-6 flex items-center justify-between hover:bg-slate-800/20 transition-colors"
+                      className="p-4 rounded-xl bg-[#161a29] border border-slate-800/80 hover:border-slate-700 transition-all flex items-center justify-between group"
                     >
-                      <div>
-                        <span className="text-sm font-semibold text-slate-100">
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-100 text-sm truncate">
                           {city.name}
-                        </span>
+                        </div>
                         {stateObj && (
-                          <span className="text-xs text-slate-400 ml-2">
+                          <div className="text-xs text-slate-400 mt-0.5 truncate">
                             in {stateObj.name}
-                          </span>
+                          </div>
                         )}
                       </div>
+
                       <button
                         onClick={() => openDeleteDialog(city, "cities")}
-                        className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors"
+                        className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors shrink-0 ml-2"
                         title="Delete City"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   );
-                })
-              )}
-            </div>
+                })}
+              </div>
+            ) : (
+              <div className="table-container">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-800 bg-[#161a29]/80 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                      <th className="py-3.5 px-4">City Name</th>
+                      <th className="py-3.5 px-4">State / Region</th>
+                      <th className="py-3.5 px-4 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60 text-xs">
+                    {cities.map((city) => {
+                      const stateObj = states.find((s) => s._id === city.state);
+                      return (
+                        <tr
+                          key={city._id}
+                          className="hover:bg-slate-800/20 transition-colors"
+                        >
+                          <td className="py-3.5 px-4 font-semibold text-slate-100">
+                            {city.name}
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-300">
+                            {stateObj ? stateObj.name : "—"}
+                          </td>
+                          <td className="py-3.5 px-4 text-right">
+                            <button
+                              onClick={() => openDeleteDialog(city, "cities")}
+                              className="p-1.5 rounded-lg border border-rose-900/50 text-rose-400 hover:text-white hover:bg-rose-600 transition-colors"
+                              title="Delete City"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )
           )}
         </div>
       )}
