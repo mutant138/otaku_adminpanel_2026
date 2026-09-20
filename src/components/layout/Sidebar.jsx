@@ -4,6 +4,7 @@ import useAuthStore from "../../store/useAuthStore.js";
 import {
   LayoutDashboard,
   Users,
+  History,
   Tags,
   Film,
   Sparkles,
@@ -28,6 +29,11 @@ export default function Sidebar({ onClose }) {
       icon: <LayoutDashboard className="w-4 h-4" />,
     },
     { label: "Users", path: "/users", icon: <Users className="w-4 h-4" /> },
+    {
+      label: "Login History",
+      path: "/login-history",
+      icon: <History className="w-4 h-4" />,
+    },
     {
       label: "Categories",
       path: "/categories",

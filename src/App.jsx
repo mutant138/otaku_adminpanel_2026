@@ -17,6 +17,7 @@ import LocationsPage from "./pages/LocationsPage.jsx";
 import EmailTemplatesPage from "./pages/EmailTemplatesPage.jsx";
 import BlogsPage from "./pages/BlogsPage.jsx";
 import FeedbacksPage from "./pages/FeedbacksPage.jsx";
+import LoginHistoryPage from "./pages/LoginHistoryPage.jsx";
 
 export default function App() {
   const { checkAuth } = useAuthStore();
@@ -37,6 +38,7 @@ export default function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/login-history" element={<LoginHistoryPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/titles" element={<TitlesPage />} />
           <Route path="/plans" element={<PlansPage />} />
