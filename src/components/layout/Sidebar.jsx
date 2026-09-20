@@ -15,6 +15,7 @@ import {
   Shield,
   X,
   BookOpen,
+  MessageSquareHeart,
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -44,6 +45,11 @@ export default function Sidebar({ onClose }) {
       icon: <CreditCard className="w-4 h-4" />,
     },
     { label: "Reports", path: "/reports", icon: <Flag className="w-4 h-4" /> },
+    {
+      label: "Feedbacks",
+      path: "/feedbacks",
+      icon: <MessageSquareHeart className="w-4 h-4" />,
+    },
     {
       label: "Locations",
       path: "/locations",

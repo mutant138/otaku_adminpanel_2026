@@ -16,6 +16,7 @@ import ReportsPage from "./pages/ReportsPage.jsx";
 import LocationsPage from "./pages/LocationsPage.jsx";
 import EmailTemplatesPage from "./pages/EmailTemplatesPage.jsx";
 import BlogsPage from "./pages/BlogsPage.jsx";
+import FeedbacksPage from "./pages/FeedbacksPage.jsx";
 
 export default function App() {
   const { checkAuth } = useAuthStore();
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/plans" element={<PlansPage />} />
           <Route path="/payments" element={<PaymentsPage />} />
           <Route path="/reports" element={<ReportsPage />} />
+          <Route path="/feedbacks" element={<FeedbacksPage />} />
           <Route path="/locations" element={<LocationsPage />} />
           <Route path="/emails" element={<EmailTemplatesPage />} />
           <Route path="/blogs" element={<BlogsPage />} />
