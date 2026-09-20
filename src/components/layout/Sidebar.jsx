@@ -17,6 +17,8 @@ import {
   X,
   BookOpen,
   MessageSquareHeart,
+  Brain,
+  Swords,
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -40,6 +42,16 @@ export default function Sidebar({ onClose }) {
       icon: <Tags className="w-4 h-4" />,
     },
     { label: "Titles", path: "/titles", icon: <Film className="w-4 h-4" /> },
+    {
+      label: "Quiz Questions",
+      path: "/quiz-questions",
+      icon: <Brain className="w-4 h-4" />,
+    },
+    {
+      label: "PvP Arena Duels",
+      path: "/duels",
+      icon: <Swords className="w-4 h-4" />,
+    },
     {
       label: "Plans & Refills",
       path: "/plans",

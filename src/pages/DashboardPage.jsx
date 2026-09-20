@@ -14,6 +14,8 @@ import {
   Plus,
   ArrowUpRight,
   TrendingUp,
+  Brain,
+  Swords,
 } from "lucide-react";
 
 export default function DashboardPage() {
@@ -72,6 +74,20 @@ export default function DashboardPage() {
       icon: <IndianRupee className="w-5 h-5 text-emerald-400" />,
       sub: `${counts.totalPaymentsCount ?? 0} Total Orders`,
       border: "border-emerald-500/20",
+    },
+    {
+      title: "Quiz Questions",
+      value: counts.totalQuizQuestions ?? 0,
+      icon: <Brain className="w-5 h-5 text-amber-400" />,
+      sub: "Anime & Gaming Trivia",
+      border: "border-amber-500/20",
+    },
+    {
+      title: "PvP Arena Duels",
+      value: counts.totalDuels ?? 0,
+      icon: <Swords className="w-5 h-5 text-rose-400" />,
+      sub: "Live Battles Logged",
+      border: "border-rose-500/20",
     },
     {
       title: "Anime Titles",
