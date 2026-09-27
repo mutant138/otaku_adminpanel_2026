@@ -23,7 +23,6 @@ import DuelsPage from "./pages/DuelsPage.jsx";
 
 export default function App() {
   const { checkAuth } = useAuthStore();
-
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
