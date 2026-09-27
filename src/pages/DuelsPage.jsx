@@ -3,7 +3,10 @@ import api from "../services/api.js";
 import { toast } from "../store/useToastStore.js";
 import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
 import Pagination from "../components/common/Pagination.jsx";
-import { LoadingSpinner, EmptyState } from "../components/common/LoadingSpinner.jsx";
+import {
+  LoadingSpinner,
+  EmptyState,
+} from "../components/common/LoadingSpinner.jsx";
 import {
   Swords,
   Trophy,
@@ -21,7 +24,12 @@ export default function DuelsPage() {
   const [duels, setDuels] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({ page: 1, limit: 15, total: 0, totalPages: 1 });
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 15,
+    total: 0,
+    totalPages: 1,
+  });
 
   // Filters
   const [selectedOutcome, setSelectedOutcome] = useState("all"); // 'all' | 'victory' | 'draw'
@@ -104,7 +112,8 @@ export default function DuelsPage() {
             PvP Arena & Combat Logs
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Monitor real-time 1v1 PvP combat battles, scores, win-rates, and Quantum Synergy rewards.
+            Monitor real-time 1v1 PvP combat battles, scores, win-rates, and
+            Quantum Synergy rewards.
           </p>
         </div>
       </div>
@@ -117,8 +126,12 @@ export default function DuelsPage() {
               <Swords className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs text-slate-400 font-medium">Total Matches</div>
-              <div className="text-xl font-bold text-slate-100">{stats.totalMatches?.toLocaleString() || 0}</div>
+              <div className="text-xs text-slate-400 font-medium">
+                Total Matches
+              </div>
+              <div className="text-xl font-bold text-slate-100">
+                {stats.totalMatches?.toLocaleString() || 0}
+              </div>
             </div>
           </div>
 
@@ -127,8 +140,12 @@ export default function DuelsPage() {
               <Activity className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs text-slate-400 font-medium">Today's Duels</div>
-              <div className="text-xl font-bold text-slate-100">{stats.todayMatches?.toLocaleString() || 0}</div>
+              <div className="text-xs text-slate-400 font-medium">
+                Today's Duels
+              </div>
+              <div className="text-xl font-bold text-slate-100">
+                {stats.todayMatches?.toLocaleString() || 0}
+              </div>
             </div>
           </div>
 
@@ -137,8 +154,12 @@ export default function DuelsPage() {
               <Crown className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs text-slate-400 font-medium">Decisive Victories</div>
-              <div className="text-xl font-bold text-slate-100">{stats.victoryMatches?.toLocaleString() || 0}</div>
+              <div className="text-xs text-slate-400 font-medium">
+                Decisive Victories
+              </div>
+              <div className="text-xl font-bold text-slate-100">
+                {stats.victoryMatches?.toLocaleString() || 0}
+              </div>
             </div>
           </div>
 
@@ -147,8 +168,12 @@ export default function DuelsPage() {
               <Trophy className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs text-slate-400 font-medium">Honorable Draws</div>
-              <div className="text-xl font-bold text-slate-100">{stats.drawMatches?.toLocaleString() || 0}</div>
+              <div className="text-xs text-slate-400 font-medium">
+                Honorable Draws
+              </div>
+              <div className="text-xl font-bold text-slate-100">
+                {stats.drawMatches?.toLocaleString() || 0}
+              </div>
             </div>
           </div>
         </div>
@@ -230,7 +255,11 @@ export default function DuelsPage() {
                         {/* Player 1 */}
                         <div className="flex items-center gap-2.5 min-w-0 flex-1">
                           <img
-                            src={p1.profilePics?.[0] || p1.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"}
+                            src={
+                              p1.profilePics?.[0] ||
+                              p1.avatar ||
+                              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+                            }
                             alt={p1.username}
                             className="w-9 h-9 rounded-xl object-cover border border-slate-700 shrink-0"
                           />
@@ -291,7 +320,11 @@ export default function DuelsPage() {
                             </div>
                           </div>
                           <img
-                            src={p2.profilePics?.[0] || p2.avatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"}
+                            src={
+                              p2.profilePics?.[0] ||
+                              p2.avatar ||
+                              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+                            }
                             alt={p2.username}
                             className="w-9 h-9 rounded-xl object-cover border border-slate-700 shrink-0"
                           />
@@ -302,11 +335,17 @@ export default function DuelsPage() {
                       <div className="flex items-center justify-between md:justify-end gap-4 shrink-0 border-t md:border-t-0 border-slate-800/80 pt-3 md:pt-0">
                         <div className="flex items-center gap-1.5 text-xs font-semibold text-cyan-400">
                           <Zap className="w-3.5 h-3.5" />
-                          <span>{isDraw ? "+5 Synergy each" : "+10 Synergy to Winner"}</span>
+                          <span>
+                            {isDraw
+                              ? "+5 Synergy each"
+                              : "+10 Synergy to Winner"}
+                          </span>
                         </div>
 
                         <div className="text-[11px] text-slate-500 font-mono">
-                          {d.createdAt ? new Date(d.createdAt).toLocaleDateString() : "Recent"}
+                          {d.createdAt
+                            ? new Date(d.createdAt).toLocaleDateString()
+                            : "Recent"}
                         </div>
 
                         <button
@@ -325,7 +364,10 @@ export default function DuelsPage() {
 
             {/* Pagination */}
             <div className="p-4 bg-[#0e1019] border-t border-slate-800">
-              <Pagination pagination={pagination} onPageChange={handlePageChange} />
+              <Pagination
+                pagination={pagination}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>
@@ -341,13 +383,19 @@ export default function DuelsPage() {
 
               <div className="space-y-3">
                 {stats.topSynergyUsers.map((u, idx) => (
-                  <div key={u._id} className="flex items-center justify-between gap-3 p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                  <div
+                    key={u._id}
+                    className="flex items-center justify-between gap-3 p-2 rounded-xl bg-slate-900/60 border border-slate-800/80"
+                  >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <span className="w-5 text-center font-mono font-bold text-xs text-amber-400">
                         #{idx + 1}
                       </span>
                       <img
-                        src={u.profilePics?.[0] || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"}
+                        src={
+                          u.profilePics?.[0] ||
+                          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
+                        }
                         alt={u.username}
                         className="w-7 h-7 rounded-lg object-cover border border-slate-700 shrink-0"
                       />

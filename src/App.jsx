@@ -52,7 +52,6 @@ export default function App() {
           <Route path="/emails" element={<EmailTemplatesPage />} />
           <Route path="/blogs" element={<BlogsPage />} />
         </Route>
-
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
