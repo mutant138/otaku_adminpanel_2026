@@ -19,7 +19,6 @@ import {
   Search,
   Star,
   Image as ImageIcon,
-  Calendar,
 } from "lucide-react";
 
 export default function TitlesPage() {
@@ -198,7 +197,8 @@ export default function TitlesPage() {
             <span>Catalog Titles Management</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Browse, search, edit, and organize anime &amp; gaming titles for user profiles
+            Browse, search, edit, and organize anime &amp; gaming titles for
+            user profiles
           </p>
         </div>
 

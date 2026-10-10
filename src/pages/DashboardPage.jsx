@@ -67,6 +67,7 @@ export default function DashboardPage() {
       icon: <Users className="w-5 h-5 text-rose-400" />,
       sub: `${counts.premiumUsers ?? 0} Premium`,
       border: "border-rose-500/20",
+      link: "/users",
     },
     {
       title: "Verified Revenue",
@@ -74,6 +75,7 @@ export default function DashboardPage() {
       icon: <IndianRupee className="w-5 h-5 text-emerald-400" />,
       sub: `${counts.totalPaymentsCount ?? 0} Total Orders`,
       border: "border-emerald-500/20",
+      link: "/payments",
     },
     {
       title: "Quiz Questions",
@@ -81,6 +83,7 @@ export default function DashboardPage() {
       icon: <Brain className="w-5 h-5 text-amber-400" />,
       sub: "Anime & Gaming Trivia",
       border: "border-amber-500/20",
+      link: "/quiz-questions",
     },
     {
       title: "PvP Arena Duels",
@@ -88,6 +91,7 @@ export default function DashboardPage() {
       icon: <Swords className="w-5 h-5 text-rose-400" />,
       sub: "Live Battles Logged",
       border: "border-rose-500/20",
+      link: "/duels",
     },
     {
       title: "Anime Titles",
@@ -95,6 +99,7 @@ export default function DashboardPage() {
       icon: <Film className="w-5 h-5 text-purple-400" />,
       sub: `${counts.animeCategories ?? 0} Genres`,
       border: "border-purple-500/20",
+      link: "/titles",
     },
     {
       title: "Game Titles",
@@ -102,6 +107,7 @@ export default function DashboardPage() {
       icon: <Gamepad2 className="w-5 h-5 text-sky-400" />,
       sub: `${counts.gameCategories ?? 0} Categories`,
       border: "border-sky-500/20",
+      link: "/titles",
     },
     {
       title: "Active Reports",
@@ -109,6 +115,7 @@ export default function DashboardPage() {
       icon: <Flag className="w-5 h-5 text-amber-400" />,
       sub: "Needs Moderation",
       border: "border-amber-500/20",
+      link: "/reports",
     },
     {
       title: "Automated Bots",
@@ -116,6 +123,7 @@ export default function DashboardPage() {
       icon: <Bot className="w-5 h-5 text-indigo-400" />,
       sub: "Matchmaking Helpers",
       border: "border-indigo-500/20",
+      link: "/bots",
     },
   ];
 
@@ -138,8 +146,15 @@ export default function DashboardPage() {
             to="/users"
             className="flex items-center gap-1.5 px-3 py-2 bg-[#161a29] hover:bg-slate-800 text-xs font-medium text-slate-200 border border-slate-700/60 rounded-xl transition-colors"
           >
-            <Plus className="w-3.5 h-3.5 text-rose-400" />
-            <span>Add User</span>
+            <Users className="w-3.5 h-3.5 text-rose-400" />
+            <span>Users</span>
+          </Link>
+          <Link
+            to="/bots"
+            className="flex items-center gap-1.5 px-3 py-2 bg-[#161a29] hover:bg-slate-800 text-xs font-medium text-slate-200 border border-slate-700/60 rounded-xl transition-colors"
+          >
+            <Bot className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Bots</span>
           </Link>
           <Link
             to="/titles"
@@ -152,29 +167,38 @@ export default function DashboardPage() {
       </div>
 
       {/* Metrics Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {statCards.map((card, idx) => (
-          <div
-            key={idx}
-            className={`p-5 rounded-2xl bg-[#121522] border ${card.border} glass-panel-hover flex flex-col justify-between`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                {card.title}
-              </span>
-              <div className="p-2 rounded-xl bg-[#181d2e]">{card.icon}</div>
-            </div>
-            <div className="mt-3">
-              <div className="text-2xl font-extrabold text-slate-100 tracking-tight">
-                {card.value}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {statCards.map((card, idx) => {
+          const Content = (
+            <div
+              className={`p-5 rounded-2xl bg-[#121522] border ${card.border} glass-panel-hover flex flex-col justify-between h-full transition-all hover:scale-101`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  {card.title}
+                </span>
+                <div className="p-2 rounded-xl bg-[#181d2e]">{card.icon}</div>
               </div>
-              <div className="text-xs text-slate-400 mt-1 flex items-center gap-1">
-                <TrendingUp className="w-3.5 h-3.5 text-slate-500" />
-                <span>{card.sub}</span>
+              <div className="mt-3">
+                <div className="text-2xl font-extrabold text-slate-100 tracking-tight">
+                  {card.value}
+                </div>
+                <div className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                  <TrendingUp className="w-3.5 h-3.5 text-slate-500" />
+                  <span>{card.sub}</span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+
+          return card.link ? (
+            <Link key={idx} to={card.link} className="block">
+              {Content}
+            </Link>
+          ) : (
+            <div key={idx}>{Content}</div>
+          );
+        })}
       </div>
 
       {/* Two Column Layout for Recent Data */}

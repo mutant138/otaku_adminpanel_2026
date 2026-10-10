@@ -30,12 +30,11 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState("table");
 
-  // Filters & Search
+  // Filters & Search (Default: Real human users only)
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
   const [verifiedFilter, setVerifiedFilter] = useState("");
   const [premiumFilter, setPremiumFilter] = useState("");
-  const [botFilter, setBotFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   // Modals state
@@ -70,12 +69,12 @@ export default function UsersPage() {
       const params = new URLSearchParams({
         page: page.toString(),
         limit: "10",
+        isBot: "false", // Strictly real human users only
       });
       if (search.trim()) params.append("q", search.trim());
       if (roleFilter) params.append("role", roleFilter);
       if (verifiedFilter) params.append("isVerified", verifiedFilter);
       if (premiumFilter) params.append("isPremium", premiumFilter);
-      if (botFilter) params.append("isBot", botFilter);
 
       const res = await api.get(`/users?${params.toString()}`);
       if (res.status && res.data) {
@@ -92,7 +91,7 @@ export default function UsersPage() {
   useEffect(() => {
     fetchUsers(currentPage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, roleFilter, verifiedFilter, premiumFilter, botFilter]);
+  }, [currentPage, roleFilter, verifiedFilter, premiumFilter]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -115,7 +114,7 @@ export default function UsersPage() {
       role: user.role || "user",
       isVerified: Boolean(user.isVerified),
       isOnboarded: Boolean(user.isOnboarded),
-      isBot: Boolean(user.isBot),
+      isBot: false,
       isPremium: Boolean(user.isPremium),
       complimentsBalance: user.complimentsBalance ?? 1,
       superLikesBalance: user.superLikesBalance ?? 1,
@@ -135,7 +134,7 @@ export default function UsersPage() {
     e.preventDefault();
     setActionLoading(true);
     try {
-      const res = await api.post("/users", formData);
+      const res = await api.post("/users", { ...formData, isBot: false });
       if (res.status) {
         toast.success("User created successfully");
         setCreateModalOpen(false);
@@ -153,7 +152,7 @@ export default function UsersPage() {
     if (!selectedUser) return;
     setActionLoading(true);
     try {
-      const payload = { ...formData };
+      const payload = { ...formData, isBot: false };
       if (!payload.password) delete payload.password;
 
       const res = await api.put(
@@ -201,17 +200,27 @@ export default function UsersPage() {
             <span>User Management</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Search, inspect, update balances, and moderate user accounts
+            Real registered human accounts, balances, preferences, and permissions
           </p>
         </div>
 
-        <button
-          onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Create New User</span>
-        </button>
+        <div className="flex items-center gap-2.5">
+          <a
+            href="/bots"
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-[#161a29] hover:bg-slate-800 text-slate-200 border border-slate-700/60 text-xs sm:text-sm font-medium rounded-xl transition-all"
+          >
+            <Bot className="w-4 h-4 text-indigo-400" />
+            <span>AI & System Bots</span>
+          </a>
+
+          <button
+            onClick={openCreateModal}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-rose-950/40 transition-all cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Create New User</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}
@@ -223,7 +232,7 @@ export default function UsersPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search name, username, email..."
+            placeholder="Search real user name, username, email..."
             className="w-full pl-10 pr-4 py-2 bg-[#161a29] border border-slate-700/60 rounded-xl text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-rose-500"
           />
         </form>
@@ -267,19 +276,6 @@ export default function UsersPage() {
             <option value="">Premium: All</option>
             <option value="true">Premium Only</option>
             <option value="false">Free Only</option>
-          </select>
-
-          <select
-            value={botFilter}
-            onChange={(e) => {
-              setBotFilter(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="px-3 py-2 bg-[#161a29] border border-slate-700/60 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-rose-500"
-          >
-            <option value="">Bots: All</option>
-            <option value="true">Bots Only</option>
-            <option value="false">Humans Only</option>
           </select>
 
           <ViewToggle view={viewMode} onViewChange={setViewMode} />
@@ -649,7 +645,7 @@ export default function UsersPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+          <div className="grid grid-cols-3 gap-3 pt-2">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Role
@@ -699,21 +695,6 @@ export default function UsersPage() {
               >
                 <option value="false">No</option>
                 <option value="true">Yes</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Is Bot
-              </label>
-              <select
-                value={formData.isBot ? "true" : "false"}
-                onChange={(e) =>
-                  setFormData({ ...formData, isBot: e.target.value === "true" })
-                }
-                className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
-              >
-                <option value="false">Human</option>
-                <option value="true">Bot</option>
               </select>
             </div>
           </div>
@@ -857,7 +838,7 @@ export default function UsersPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+          <div className="grid grid-cols-3 gap-3 pt-2">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Role
@@ -907,21 +888,6 @@ export default function UsersPage() {
               >
                 <option value="false">No</option>
                 <option value="true">Yes</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Is Bot
-              </label>
-              <select
-                value={formData.isBot ? "true" : "false"}
-                onChange={(e) =>
-                  setFormData({ ...formData, isBot: e.target.value === "true" })
-                }
-                className="w-full px-3 py-2 bg-[#161a29] border border-slate-700 rounded-xl text-xs text-slate-100"
-              >
-                <option value="false">Human</option>
-                <option value="true">Bot</option>
               </select>
             </div>
           </div>

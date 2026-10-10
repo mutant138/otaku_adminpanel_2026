@@ -8,6 +8,7 @@ import AdminLayout from "./components/layout/AdminLayout.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
+import BotsPage from "./pages/BotsPage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
 import TitlesPage from "./pages/TitlesPage.jsx";
 import PlansPage from "./pages/PlansPage.jsx";
@@ -40,6 +41,7 @@ export default function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/bots" element={<BotsPage />} />
           <Route path="/login-history" element={<LoginHistoryPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/titles" element={<TitlesPage />} />

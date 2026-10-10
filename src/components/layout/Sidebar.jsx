@@ -20,6 +20,7 @@ import {
   Brain,
   Swords,
   Gamepad2,
+  Bot,
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -32,6 +33,7 @@ export default function Sidebar({ onClose }) {
       icon: <LayoutDashboard className="w-4 h-4" />,
     },
     { label: "Users", path: "/users", icon: <Users className="w-4 h-4" /> },
+    { label: "Bots", path: "/bots", icon: <Bot className="w-4 h-4" /> },
     {
       label: "Login History",
       path: "/login-history",
