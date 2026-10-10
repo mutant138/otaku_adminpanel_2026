@@ -20,6 +20,7 @@ import FeedbacksPage from "./pages/FeedbacksPage.jsx";
 import LoginHistoryPage from "./pages/LoginHistoryPage.jsx";
 import QuizQuestionsPage from "./pages/QuizQuestionsPage.jsx";
 import DuelsPage from "./pages/DuelsPage.jsx";
+import GameControlsPage from "./pages/GameControlsPage.jsx";
 
 export default function App() {
   const { checkAuth } = useAuthStore();
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/titles" element={<TitlesPage />} />
           <Route path="/quiz-questions" element={<QuizQuestionsPage />} />
+          <Route path="/game-controls" element={<GameControlsPage />} />
           <Route path="/duels" element={<DuelsPage />} />
           <Route path="/plans" element={<PlansPage />} />
           <Route path="/payments" element={<PaymentsPage />} />

@@ -19,6 +19,7 @@ import {
   MessageSquareHeart,
   Brain,
   Swords,
+  Gamepad2,
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -46,6 +47,11 @@ export default function Sidebar({ onClose }) {
       label: "Quiz Questions",
       path: "/quiz-questions",
       icon: <Brain className="w-4 h-4" />,
+    },
+    {
+      label: "Game Controls",
+      path: "/game-controls",
+      icon: <Gamepad2 className="w-4 h-4" />,
     },
     {
       label: "PvP Arena Duels",
